@@ -3,10 +3,10 @@
     --color-bg: #ffffff;
     --color-surface: #f4f4f5;
     --color-text: #111111;
-    --color-text-muted: #666666;
-    --color-primary: #6366f1;
-    --color-primary-hover: #4f46e5;
-    --color-border: #e4e4e7;
+    --color-text-muted: #525252;
+    --color-primary: #000000;
+    --color-primary-hover: #268492;
+    --color-border: #000000;
 }
 
 /* --- Dark theme overrides --- */
@@ -14,10 +14,10 @@
     --color-bg: #0f0f10;
     --color-surface: #1c1c1e;
     --color-text: #f0f0f0;
-    --color-text-muted: #a0a0a0;
-    --color-primary: #818cf8;
-    --color-primary-hover: #6366f1;
-    --color-border: #2e2e32;
+    --color-text-muted: #cecece;
+    --color-primary: #ffffff;
+    --color-primary-hover: #cacaca;
+    --color-border: #ffffff;
 }
 
 /* --- System preference fallback (when theme = "system") --- */
@@ -39,7 +39,7 @@ body {
     color: var(--color-text);
     font-family: sans-serif;
     transition: background-color 0.2s, color 0.2s;
-    margin: 2rem;
+    /* margin: 2rem;*/
 }
 
 
