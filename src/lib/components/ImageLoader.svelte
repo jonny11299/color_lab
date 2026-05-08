@@ -1,5 +1,7 @@
 <script>
-    import { uploadImage } from "$lib/utils/images.js";
+    import { readPixels, uploadImage } from "$lib/utils/images.js";
+    import { imageStore } from "$lib/stores/imageStore.svelte.js";
+    import { tick } from "svelte";
 
     let isDraggingOver = $state(false);
     let previewUrl = $state(null);
@@ -31,10 +33,13 @@
     async function handleFile(file) {
         if (!file) return;
         previewUrl = URL.createObjectURL(file);
-        const met = await uploadImage(file);
+        await tick();
+        const met = await uploadImage(file); // met = metadata
         if (met) {
             console.log("Getting metadata in imageLoader");
-            metadata = met;
+            metadata = met; // updates state
+            await tick();
+            readPixels();
         }
     }
 
@@ -51,6 +56,7 @@
 
 <div class="container">
     <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <h3>Image</h3>
     <div
         class="dropzone"
         class:active={isDraggingOver}
@@ -71,16 +77,18 @@
     <div class="metadata">
         {#if metadata}
             <p>Name: {metadata?.name}</p>
-            <p>Size: {`${metadata?.width} x ${metadata?.height} px`}</p>
+            <p>Type: {metadata?.type}</p>
             <p>File Size: {formatSize(metadata.size)}</p>
+            <p>Size: {`${metadata?.width} x ${metadata?.height} px`}</p>
         {/if}
     </div>
+
+    <!-- Display image store -->
+    <p>Image store:</p>
+    <pre>{imageStore.formatted}</pre>
 </div>
 
 <style>
-    h2 {
-        color: green;
-    }
     .container {
         border: 2px solid var(--color-border);
         border-radius: 1.5rem;
