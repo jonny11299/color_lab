@@ -122,6 +122,7 @@
     .preview {
         min-width: 25%;
         max-height: 40vh;
+        max-width: 100%;
         object-fit: contain;
     }
     .metadata {

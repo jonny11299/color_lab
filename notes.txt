@@ -8,13 +8,32 @@ And webknobs
 
 
 
+To do for next time:
+- Select a way to tweak the colors in "Tailored" better (click on it, a window opens. Maybe beneath this component?)
+- also add a "normal" color picker for "Tailored"
+- Wire in a way to affect border size and width
 
-1. bg1
-2. bg2
-3. text
-4. 1
-5. 2
-6. accent 
+- Export CSS definitions from the preview 
+- Save a palette to the desktop  
+- Make the swatches trim the returned colors if there were no hits.
+
+
+
+End steps:
+- See if "swatches" is a real word"
+- Make everything's layout much better, more fluid 
+
+Quick points:
+- "Randomize" button for the palette
+- "Lock" buttons for the palette (works with randomize and select index)
+- Text color on palette colors changes based on selected color
+
+
+Polish:
+- Add the 3D renders for colors
+- Undo / Redo tree for "tailored"? (size 20)
+
+
 
 optional
 1. border color 

@@ -10,7 +10,18 @@
     import { fade } from "svelte/transition";
     import Tailored from "./Tailored.svelte";
 
+    let renderTailored = $state(false);
     let renderSelections = $derived(imageStore.swatches?.length > 0);
+
+    // Renders tailored once the user has selected all colors.
+    // determined via "no more placeholder colors"
+    $effect(() => {
+        if (!colorStore.tailored.some((c) => c.color.includes("var(--"))) {
+            renderTailored = true;
+        } else {
+            renderTailored = false;
+        }
+    });
 
     let tailoredColors = $derived(colorStore.tailored);
 
@@ -64,9 +75,16 @@
     <ImageAndSwatch />
     <!-- <DummyElement /> -->
     {#if renderSelections}
-        <div class="leftrightgrid" transition:fade={{ duration: 2000 }}>
-            <Palette />
-            <Tailored />
+        <div class="leftrightgrid">
+            <div transition:fade={{ duration: 2000 }}>
+                <Palette />
+            </div>
+
+            {#if renderTailored}
+                <div transition:fade={{ duration: 2000 }}>
+                    <Tailored />
+                </div>
+            {/if}
         </div>
     {/if}
     <!--
