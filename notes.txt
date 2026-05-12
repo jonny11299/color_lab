@@ -1,0 +1,58 @@
+You're going to want to read the "three.js" documentation:
+
+https://devdocs.io/offline
+
+
+And view the chrome.js api files (in your downloads)
+And webknobs
+
+
+
+
+1. bg1
+2. bg2
+3. text
+4. 1
+5. 2
+6. accent 
+
+optional
+1. border color 
+2. border width
+3. border round
+
+Color transformations:
+1. apply contrast (change hue)
+2. Change color from palette
+
+
+
+
+
+        Pending:
+        - format Palette colors correctly (should show the colored text on background, accents, etc)
+        - figure out if "swatches" is a real word
+        - Make the auto-convert in the "Palette"
+            - as well as the darker/lighter versions of the color
+            - that'll be a separate .js file
+        - fix the "swatch preview doesn't transition colors" bug 
+
+        - Add the "website preview" section 
+        - maybe move the swatch preview between "swatches" and "palette"? 
+            - or better yet, just make it do that to the selected one on the palette
+
+
+
+        - Parameterize the "Image" uploader
+        - add a cube to the "Image" uploader
+        - make it sexy
+
+
+
+        - Claude made some cool results but the code is stinky. I think our best bet is:
+        - chroma.js 
+        - three.js 
+        - some type of knobs (https://next.jqueryscript.net/svelte/svelte-knob-control/)
+
+
+        - follow the Web Content Accessibility Guidlines (WCAG)

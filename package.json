@@ -40,5 +40,10 @@
 	},
 	"keywords": [
 		"svelte"
-	]
+	],
+	"dependencies": {
+		"@eyewave/web-knobs": "^0.0.7",
+		"chroma": "^0.0.1",
+		"three": "^0.184.0"
+	}
 }

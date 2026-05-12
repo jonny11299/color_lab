@@ -94,7 +94,7 @@
         border-radius: 1.5rem;
         padding: 1rem;
         max-width: 100%;
-        min-width: 50%;
+        min-width: 20rem;
 
         display: flex;
         flex-direction: column;

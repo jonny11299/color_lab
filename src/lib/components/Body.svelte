@@ -2,46 +2,118 @@
 
 <script>
     import ImageAndSwatch from "./ImageAndSwatch.svelte";
+    import PreviewSite from "./PreviewSite.svelte";
     import DummyElement from "$lib/components/DummyElement.svelte";
     import { imageStore } from "$lib/stores/imageStore.svelte.js";
+    import { colorStore } from "$lib/stores/colorStore.svelte.js";
     import Palette from "./Palette.svelte";
     import { fade } from "svelte/transition";
+    import Tailored from "./Tailored.svelte";
 
     let renderSelections = $derived(imageStore.swatches?.length > 0);
+
+    let tailoredColors = $derived(colorStore.tailored);
+
+    // in preview site:
+    /*
+    let {
+        background = "#fafafa",
+        backgroundSubtle = "#f0f0f5",
+        text = "#1a1a2e",
+        primary = "#5c6ac4",
+        secondary = "#8892d4",
+        accent = "#f49342",
+        border = "#e2e2ea",
+        muteStrength = 1,
+        typeScale = 1.333,
+    }: Props = $props();
+    */
+
+    // in color store:
+
+    /*
+
+        {
+            name: "bg",
+            color: "var(--color-bg)",
+        },
+        {
+            name: "bg-2",
+            color: "var(--color-bg)",
+        },
+        {
+            name: "text",
+            color: "var(--color-bg)",
+        },
+        {
+            name: "1",
+            color: "var(--color-bg)",
+        },
+        {
+            name: "2",
+            color: "var(--color-bg)",
+        },
+        {
+            name: "accent",
+            color: "var(--color-bg)",
+        },
+   */
 </script>
 
 <div class="bodycontainer">
     <ImageAndSwatch />
     <!-- <DummyElement /> -->
     {#if renderSelections}
-        <div transition:fade={{ duration: 2000 }}>
+        <div class="leftrightgrid" transition:fade={{ duration: 2000 }}>
             <Palette />
+            <Tailored />
         </div>
     {/if}
-    <pre>
-        Pending:
-        - format Palette colors correctly (should show the colored text on background, accents, etc)
-        - figure out if "swatches" is a real word
-        - Make the auto-convert in the "Palette"
-            - as well as the darker/lighter versions of the color
-            - that'll be a separate .js file
-
-
-
-        - Parameterize the "Image" uploader
-        - add a cube to the "Image" uploader
-        - make it sexy
-    </pre>
+    <!--
+        background = "#fafafa",
+        backgroundSubtle = "#f0f0f5",
+        text = "#1a1a2e",
+        primary = "#5c6ac4",
+        secondary = "#8892d4",
+        accent = "#f49342",
+        border = "#e2e2ea",
+        muteStrength = 1,
+        typeScale = 1.333,
+        -->
+    <PreviewSite
+        background={tailoredColors[0].color}
+        backgroundSubtle={tailoredColors[1].color}
+        text={tailoredColors[2].color}
+        primary={tailoredColors[3].color}
+        secondary={tailoredColors[4].color}
+        accent={tailoredColors[5].color}
+        muteStrength={0.5}
+        typeScale={1.2}
+        borderWidth={3}
+        borderRadius={10}
+    />
 </div>
 
 <style>
+    /* Drop them in left-to-right, enable scroll right */
     .bodycontainer {
-        margin: 2rem;
+        padding: 2rem; /* padding instead of margin so overflow-x works */
+        width: 100%;
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-wrap: nowrap;
+        justify-content: flex-start; /* was: center */
         align-items: flex-start;
         gap: 2rem;
+        overflow-x: auto;
+        box-sizing: border-box;
+        overscroll-behavior-x: contain; /* Disable scrolling left-right causing page navigation */
+    }
+
+    .leftrightgrid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        align-items: start;
+        gap: 1rem;
     }
 </style>

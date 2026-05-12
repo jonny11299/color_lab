@@ -6,14 +6,14 @@
     let copied = $state(null);
     let hoveredHex = $state(null);
 
-    let selection = $derived(colorStore.curIndex);
+    let selectedSwatch = $derived(colorStore.curIndex);
 
     function handleClick(hex) {
         copyHex(hex);
-        colorStore.setColor(selection, hex);
+        colorStore.setColor(selectedSwatch, hex);
         colorStore.iterate();
 
-        console.log("selection now " + selection);
+        console.log("selection now " + selectedSwatch);
     }
     function copyHex(hex) {
         navigator.clipboard.writeText(hex);
@@ -59,7 +59,7 @@
         border-radius: 1.5rem;
         padding: 1rem;
         max-width: 100%;
-        min-width: 50%;
+        min-width: 10rem;
 
         display: flex;
         flex-direction: column;
