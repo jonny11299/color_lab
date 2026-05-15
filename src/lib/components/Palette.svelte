@@ -34,8 +34,8 @@
             class="selections"
             style="background: {s.color}; 
                 border-color: {selectedIndex === j
-                ? `var(--color-text)`
-                : `var(--color-bg)`};
+                ? `var(--text)`
+                : `var(--bg)`};
                  border-width: {selectedIndex === j ? `3px` : `0`}"
             onclick={() => selectIndex(j)}
         >
@@ -46,7 +46,7 @@
 
 <style>
     .container {
-        border: 2px solid var(--color-border);
+        border: 2px solid var(--border);
         border-radius: 1.5rem;
         padding: 1rem;
         max-width: 11rem;
@@ -61,8 +61,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid var(--color-border);
-        color: var(--color-text);
+        border: 1px solid var(--border);
+        color: var(--text);
 
         width: 5rem;
         height: 2rem;

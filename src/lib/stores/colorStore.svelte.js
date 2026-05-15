@@ -7,27 +7,27 @@ function createColorStore() {
     let selections = $state([
         {
             name: "bg",
-            color: "var(--color-bg)",
+            color: "var(--bg)",
         },
         {
             name: "bg-2",
-            color: "var(--color-bg)",
+            color: "var(--bg)",
         },
         {
             name: "text",
-            color: "var(--color-bg)",
+            color: "var(--bg)",
         },
         {
             name: "1",
-            color: "var(--color-bg)",
+            color: "var(--bg)",
         },
         {
             name: "2",
-            color: "var(--color-bg)",
+            color: "var(--bg)",
         },
         {
             name: "accent",
-            color: "var(--color-bg)",
+            color: "var(--bg)",
         }
     ]);
 
@@ -35,27 +35,27 @@ function createColorStore() {
     let tailored = $state([
         {
             name: "bg",
-            color: "var(--color-bg)",
+            color: "var(--bg)",
         },
         {
             name: "bg-2",
-            color: "var(--color-bg)",
+            color: "var(--bg)",
         },
         {
             name: "text",
-            color: "var(--color-text)",
+            color: "var(--text)",
         },
         {
             name: "1",
-            color: "var(--color-text-muted)",
+            color: "var(--text-muted)",
         },
         {
             name: "2",
-            color: "var(--color-text-muted)",
+            color: "var(--text-muted)",
         },
         {
             name: "accent",
-            color: "var(--color-text-muted)",
+            color: "var(--text-muted)",
         }
     ]);
 
@@ -95,54 +95,54 @@ function createColorStore() {
             selections = [
                 {
                     name: "bg",
-                    color: "var(--color-bg)",
+                    color: "var(--bg)",
                 },
                 {
                     name: "bg-2",
-                    color: "var(--color-bg)",
+                    color: "var(--bg)",
                 },
                 {
                     name: "text",
-                    color: "var(--color-bg)",
+                    color: "var(--bg)",
                 },
                 {
                     name: "1",
-                    color: "var(--color-bg)",
+                    color: "var(--bg)",
                 },
                 {
                     name: "2",
-                    color: "var(--color-bg)",
+                    color: "var(--bg)",
                 },
                 {
                     name: "accent",
-                    color: "var(--color-bg)",
+                    color: "var(--bg)",
                 }
             ];
 
             tailored = [
                 {
                     name: "bg",
-                    color: "var(--color-bg)",
+                    color: "var(--bg)",
                 },
                 {
                     name: "bg-2",
-                    color: "var(--color-bg)",
+                    color: "var(--bg)",
                 },
                 {
                     name: "text",
-                    color: "var(--color-text)",
+                    color: "var(--text)",
                 },
                 {
                     name: "1",
-                    color: "var(--color-text-muted)",
+                    color: "var(--text-muted)",
                 },
                 {
                     name: "2",
-                    color: "var(--color-text-muted)",
+                    color: "var(--text-muted)",
                 },
                 {
                     name: "accent",
-                    color: "var(--color-text-muted)",
+                    color: "var(--text-muted)",
                 }
             ];
         }

@@ -57,6 +57,7 @@
 <div class="container">
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <h3>Image</h3>
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
     <div
         class="dropzone"
         class:active={isDraggingOver}
@@ -90,7 +91,7 @@
 
 <style>
     .container {
-        border: 2px solid var(--color-border);
+        border: 2px solid var(--border);
         border-radius: 1.5rem;
         padding: 1rem;
         max-width: 100%;
@@ -105,7 +106,7 @@
         margin: 2rem;
         padding: 2rem;
         border-radius: 1.5rem;
-        border: 2px dashed var(--color-text-muted);
+        border: 2px dashed var(--text-muted);
     }
 
     .dropzone:hover {
@@ -114,9 +115,9 @@
 
     .dropzone:hover,
     .dropzone.active {
-        border: 2px dashed var(--color-primary-hover);
-        color: var(--color-primary-hover);
-        background: var(--color-surface);
+        border: 2px dashed var(--primary-hover);
+        color: var(--primary-hover);
+        background: var(--surface);
     }
 
     .preview {

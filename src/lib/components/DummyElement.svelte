@@ -7,7 +7,7 @@
 
 <style>
     .container {
-        border: 2px dashed var(--color-border);
+        border: 2px dashed var(--border);
         border-radius: 1.5rem;
         padding: 1rem;
     }

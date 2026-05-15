@@ -110,8 +110,8 @@ accent on background — badge text
                 class="selections"
                 style="background: {t.color}; 
                 border-color: {tailoredIndex === j
-                    ? `var(--color-text)`
-                    : `var(--color-bg)`};
+                    ? `var(--text)`
+                    : `var(--bg)`};
                  border-width: {tailoredIndex === j ? `3px` : `0`}"
                 onclick={() => selectIndex(j)}
             >
@@ -151,7 +151,7 @@ accent on background — badge text
 
 <style>
     .container {
-        border: 2px solid var(--color-border);
+        border: 2px solid var(--border);
         border-radius: 1.5rem;
         padding: 1rem;
         max-width: 20rem;
@@ -166,8 +166,8 @@ accent on background — badge text
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid var(--color-border);
-        color: var(--color-text);
+        border: 1px solid var(--border);
+        color: var(--text);
 
         width: 5rem;
         height: 2rem;
@@ -189,7 +189,7 @@ accent on background — badge text
     }
 
     .contrastSpanMuted {
-        color: var(--color-text-muted);
+        color: var(--text-muted);
     }
     .contrastSpanGood {
     }
@@ -211,8 +211,8 @@ accent on background — badge text
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 1px solid var(--color-border);
-        color: var(--color-text);
+        border: 1px solid var(--border);
+        color: var(--text);
 
         width: 10rem;
         height: 2rem;
@@ -222,14 +222,14 @@ accent on background — badge text
     }
 
     .futureButton {
-        border: 1px solid var(--color-border);
-        color: var(--color-text);
+        border: 1px solid var(--border);
+        color: var(--text);
         padding: 3px;
         border-radius: 1rem;
         user-select: none;
     }
     .futureButton:hover {
         cursor: pointer;
-        background-color: var(--color-surface);
+        background-color: var(--surface);
     }
 </style>

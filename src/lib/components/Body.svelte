@@ -26,50 +26,6 @@
 
     let tailoredColors = $derived(colorStore.tailored);
 
-    // in preview site:
-    /*
-    let {
-        background = "#fafafa",
-        backgroundSubtle = "#f0f0f5",
-        text = "#1a1a2e",
-        primary = "#5c6ac4",
-        secondary = "#8892d4",
-        accent = "#f49342",
-        border = "#e2e2ea",
-        muteStrength = 1,
-        typeScale = 1.333,
-    }: Props = $props();
-    */
-
-    // in color store:
-
-    /*
-
-        {
-            name: "bg",
-            color: "var(--color-bg)",
-        },
-        {
-            name: "bg-2",
-            color: "var(--color-bg)",
-        },
-        {
-            name: "text",
-            color: "var(--color-bg)",
-        },
-        {
-            name: "1",
-            color: "var(--color-bg)",
-        },
-        {
-            name: "2",
-            color: "var(--color-bg)",
-        },
-        {
-            name: "accent",
-            color: "var(--color-bg)",
-        },
-   */
 </script>
 
 <div class="bodycontainer">
@@ -88,17 +44,7 @@
             {/if}
         </div>
     {/if}
-    <!--
-        background = "#fafafa",
-        backgroundSubtle = "#f0f0f5",
-        text = "#1a1a2e",
-        primary = "#5c6ac4",
-        secondary = "#8892d4",
-        accent = "#f49342",
-        border = "#e2e2ea",
-        muteStrength = 1,
-        typeScale = 1.333,
-        -->
+    
     <PreviewSite
         background={tailoredColors[0].color}
         backgroundSubtle={tailoredColors[1].color}

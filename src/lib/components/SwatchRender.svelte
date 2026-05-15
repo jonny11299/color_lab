@@ -27,7 +27,7 @@
     <div class="swatch-preview-wrapper">
         <div
             class="swatch-preview"
-            style="background-color: {hoveredHex ?? 'var(--color-bg'}"
+            style="background-color: {hoveredHex ?? 'var(--bg'}"
         ></div>
         <div
             class="copiedHex"
@@ -55,7 +55,7 @@
 
 <style>
     .container {
-        border: 2px solid var(--color-border);
+        border: 2px solid var(--border);
         border-radius: 1.5rem;
         padding: 1rem;
         max-width: 100%;
@@ -77,7 +77,7 @@
         justify-content: center;
     }
     .swatch {
-        /* border: 1px solid var(--color-border);*/
+        /* border: 1px solid var(--border);*/
         width: 100%;
         aspect-ratio: 1;
         padding: 0px;
@@ -121,11 +121,11 @@
         width: 100%;
         aspect-ratio: 1;
         border-radius: 3px;
-        border: 0px solid var(--color-border);
+        border: 0px solid var(--border);
         margin-bottom: 0.5rem;
     }
     .copiedHex {
         text-align: center;
-        color: var(--color-text);
+        color: var(--text);
     }
 </style>

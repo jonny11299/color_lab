@@ -26,6 +26,15 @@ Pending:
 
 
 
+Overhaul visual features:
+ - Colors remain black and white
+ - Hard borders 
+ - Font is defined in .css 
+ - 
+
+
+
+
 To do for next time:
 - Select a way to tweak the colors in "Tailored" better (click on it, a window opens. Maybe beneath this component?)
 - also add a "normal" color picker for "Tailored"

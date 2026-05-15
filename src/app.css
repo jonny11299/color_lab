@@ -1,43 +1,48 @@
 /* --- Base variables (light theme default) --- */
 :root {
-    --color-bg: #ffffff;
-    --color-surface: #f4f4f5;
-    --color-text: #111111;
-    --color-text-muted: #525252;
-    --color-primary: #000000;
-    --color-primary-hover: #268492;
-    --color-border: #000000;
+    --bg: #ffffff;
+    --surface: #f4f4f5;
+    --text: #111111;
+    --text-muted: #525252;
+    --primary: #000000;
+    --primary-hover: #518cc2;
+    --border: #000000;
+
+    --divider-size: 0.5rem;
+
+    --font-sans: sans-serif;
+    --font-mono: monospace;
 }
 
 /* --- Dark theme overrides --- */
 [data-theme="dark"] {
-    --color-bg: #0f0f10;
-    --color-surface: #1c1c1e;
-    --color-text: #f0f0f0;
-    --color-text-muted: #cecece;
-    --color-primary: #ffffff;
-    --color-primary-hover: #cacaca;
-    --color-border: #ffffff;
+    --bg: #0f0f10;
+    --surface: #1c1c1e;
+    --text: #f0f0f0;
+    --text-muted: #cecece;
+    --primary: #ffffff;
+    --primary-hover: #32822b;
+    --border: #ffffff;
 }
 
 /* --- System preference fallback (when theme = "system") --- */
 @media (prefers-color-scheme: dark) {
     [data-theme="system"] {
-        --color-bg: #0f0f10;
-        --color-surface: #1c1c1e;
-        --color-text: #f0f0f0;
-        --color-text-muted: #a0a0a0;
-        --color-primary: #818cf8;
-        --color-primary-hover: #6366f1;
-        --color-border: #2e2e32;
+        --bg: #0f0f10;
+        --surface: #1c1c1e;
+        --text: #f0f0f0;
+        --text-muted: #a0a0a0;
+        --primary: #818cf8;
+        --primary-hover: #6366f1;
+        --border: #2e2e32;
     }
 }
 
 /* --- Global base styles --- */
 body {
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    font-family: sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
     transition: background-color 0.2s, color 0.2s;
     /* margin: 2rem;*/
 }
@@ -45,15 +50,15 @@ body {
 
 
 h1 {
-    color: var(--color-primary);
+    color: var(--primary);
 }
 
 .card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    color: var(--color-text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
 }
 
 p {
-    color: var(--color-text-muted);
+    color: var(--text-muted);
 }
