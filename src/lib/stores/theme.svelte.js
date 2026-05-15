@@ -9,7 +9,15 @@ function createThemeStore() {
     function setTheme(newTheme) {
         theme = newTheme;
         localStorage.setItem('theme', newTheme);
+
+        document.documentElement.classList.add('no-transition');
         document.documentElement.setAttribute('data-theme', newTheme);
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                document.documentElement.classList.remove('no-transition');
+            });
+        });
     }
 
     function init() {

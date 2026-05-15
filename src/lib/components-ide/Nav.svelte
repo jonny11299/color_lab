@@ -3,12 +3,12 @@
 </script>
 
 <nav>
-    <span class="title"><h1>Color Lab</h1></span>
+    <span class="title"><h3>Color Lab</h3></span>
 
     <div class="theme-buttons">
         <button onclick={() => themeStore.setTheme("light")}>Light</button>
         <button onclick={() => themeStore.setTheme("dark")}>Dark</button>
-        <button onclick={() => themeStore.setTheme("system")}>System</button>
+        <!--<button onclick={() => themeStore.setTheme("system")}>System</button>-->
     </div>
 
     <p>Current: {themeStore.theme}</p>
@@ -21,8 +21,10 @@
         justify-content: space-between;
         padding: 0rem 2rem;
         background: var(--bg);
-        border-bottom: 2px solid var(--border);
+        border-bottom: 0px solid var(--border);
         border-radius: 0px;
+
+        max-height: 4rem;
     }
 
     .title {

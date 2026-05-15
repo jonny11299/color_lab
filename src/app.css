@@ -1,27 +1,32 @@
 /* --- Base variables (light theme default) --- */
 :root {
     --bg: #ffffff;
-    --surface: #f4f4f5;
+    --surface: #ededed;
+    --divider: #d9d9d9;
     --text: #111111;
     --text-muted: #525252;
     --primary: #000000;
     --primary-hover: #518cc2;
     --border: #000000;
 
-    --divider-size: 0.5rem;
+    --divider-size: 0.4rem;
 
     --font-sans: sans-serif;
     --font-mono: monospace;
+
+    --transition-time: 0.2s;
 }
 
 /* --- Dark theme overrides --- */
 [data-theme="dark"] {
     --bg: #0f0f10;
     --surface: #1c1c1e;
+    --divider: #333334;
     --text: #f0f0f0;
     --text-muted: #cecece;
     --primary: #ffffff;
-    --primary-hover: #32822b;
+    --primary-hover: #61b554;
+    /* --primary-hover: #32822b; lower contrast alternative */
     --border: #ffffff;
 }
 
@@ -38,12 +43,25 @@
     }
 }
 
+
+html {
+    background-color: var(--bg);
+}
+
+/* Colors transition instantly. */
+/* We don't do an ease of color transitions because some modern browsers don't really support it. */
+
+.no-transition * {
+    transition: none !important;
+}
+
 /* --- Global base styles --- */
 body {
     background-color: var(--bg);
     color: var(--text);
     font-family: var(--font-sans);
-    transition: background-color 0.2s, color 0.2s;
+    transition: background-color var(--transition-time), color var(--transition-time);
+    margin: 0;
     /* margin: 2rem;*/
 }
 

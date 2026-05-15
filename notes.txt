@@ -9,6 +9,17 @@ And webknobs
 
 
 
+
+Final version things to add:
+    - Border hovered around the element the user should focus on (just like, 1px)
+    - 
+
+
+
+
+
+
+
 5/15/26 pre-visual-overhaul:
 Feature audit:
 
