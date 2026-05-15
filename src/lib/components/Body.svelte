@@ -6,6 +6,7 @@
     import DummyElement from "$lib/components/DummyElement.svelte";
     import { imageStore } from "$lib/stores/imageStore.svelte.js";
     import { colorStore } from "$lib/stores/colorStore.svelte.js";
+    import { paramStore } from "$lib/stores/paramStore.svelte.js";
     import Palette from "./Palette.svelte";
     import { fade } from "svelte/transition";
     import Tailored from "./Tailored.svelte";
@@ -105,10 +106,10 @@
         primary={tailoredColors[3].color}
         secondary={tailoredColors[4].color}
         accent={tailoredColors[5].color}
-        muteStrength={0.5}
-        typeScale={1.2}
-        borderWidth={3}
-        borderRadius={10}
+        muteStrength={paramStore.params[0].cur ?? 0.5}
+        typeScale={paramStore.params[1].cur ?? 1.2}
+        borderWidth={paramStore.params[2].cur ?? 3}
+        borderRadius={paramStore.params[3].cur ?? 10}
     />
 </div>
 

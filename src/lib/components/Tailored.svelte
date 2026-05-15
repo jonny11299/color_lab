@@ -1,9 +1,17 @@
 <script>
     import { colorStore } from "$lib/stores/colorStore.svelte.js";
+    import { paramStore } from "$lib/stores/paramStore.svelte.js";
     import chroma, { colors } from "chroma-js";
 
     let tailored = $derived(colorStore.tailored);
     let tailoredIndex = $derived(colorStore.curTailoredIndex);
+
+    /*
+        muteStrength={0.5}
+        typeScale={1.2}
+        borderWidth={3}
+        borderRadius={10}
+        */
 
     function selectIndex(i) {
         // console.log(i);
@@ -89,13 +97,13 @@ accent on background — badge text
 <div class="container">
     <h3>Tailored</h3>
     <p>(Better options)</p>
-    <div class="colorrow">
+    <div class="colorRow">
         <h3>Contrast:</h3>
         <h4>bg:</h4>
         <h4>bg-2:</h4>
     </div>
     {#each tailored as t, j}
-        <div class="colorrow">
+        <div class="colorRow">
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div
@@ -118,6 +126,27 @@ accent on background — badge text
             >
         </div>
     {:else}{/each}
+
+    <!-- Sliders -->
+        <!-- Going to have to make this typeable, with an input: -->
+    {#each paramStore.params as p, i}
+        <div class="paramRow">
+            <div class="paramItem">{p.name}: {p.cur.toFixed(paramStore.getFixed(i))}</div>
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <span class="futureButton" onclick={() => {paramStore.upByIndex(i)}}>up</span>
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <span class="futureButton" onclick={() => paramStore.downByIndex(i)}>down</span>
+        </div>
+    {/each}
+
+    <!-- 
+        muteStrength={0.5}
+        typeScale={1.2}
+        borderWidth={3}
+        borderRadius={10}
+        -->
 </div>
 
 <style>
@@ -150,7 +179,7 @@ accent on background — badge text
         cursor: pointer;
     }
 
-    .colorrow {
+    .colorRow {
         display: grid;
         align-items: first baseline;
         align-content: first baseline;
@@ -167,5 +196,40 @@ accent on background — badge text
     .contrastSpanBad {
         text-decoration: line-through;
         color: red;
+    }
+
+    .paramRow {
+        display: grid;
+        align-items: first baseline;
+        align-content: first baseline;
+        justify-items: center;
+        justify-self: center;
+        grid-template-columns: repeat(1, 4fr 1fr 1fr);
+    }
+
+    .paramItem {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--color-border);
+        color: var(--color-text);
+
+        width: 10rem;
+        height: 2rem;
+        border-radius: 1rem;
+
+        margin-top: 1rem;
+    }
+
+    .futureButton {
+        border: 1px solid var(--color-border);
+        color: var(--color-text);
+        padding: 3px;
+        border-radius: 1rem;
+        user-select: none;
+    }
+    .futureButton:hover {
+        cursor: pointer;
+        background-color: var(--color-surface);
     }
 </style>

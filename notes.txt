@@ -8,6 +8,24 @@ And webknobs
 
 
 
+
+5/15/26 pre-visual-overhaul:
+Feature audit:
+
+Working:
+    - Upload Image
+    - Select colors 
+    - Tweak webpage settings 
+    - View preview
+
+Pending:
+    - Tweak colors using chroma.js 
+    - "good" design for changing preview params 
+    - Export .css definitions 
+    - undo / redo tree for "tailored" 
+
+
+
 To do for next time:
 - Select a way to tweak the colors in "Tailored" better (click on it, a window opens. Maybe beneath this component?)
 - also add a "normal" color picker for "Tailored"

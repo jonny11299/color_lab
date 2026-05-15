@@ -198,7 +198,9 @@
     <!-- CTA BANNER -->
     <section class="sv-cta-banner">
         <h2 class="sv-cta-h2">Ready to see the difference?</h2>
-        <p class="sv-cta-p">Join thousands of teams already using Lumina.</p>
+        <p class="sv-cta-p">
+            Join thousands of teams already using Lumina.
+        </p>
         <button class="sv-btn-inverse"
             >Start for free — no credit card needed</button
         >
@@ -261,6 +263,8 @@
             sans-serif;
         line-height: 1.6;
         -webkit-font-smoothing: antialiased;
+        overflow: hidden;
+        min-width: 70%;
     }
 
     .sv *,

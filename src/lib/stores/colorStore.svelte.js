@@ -15,19 +15,19 @@ function createColorStore() {
         },
         {
             name: "text",
-            color: "var(--color-text)",
+            color: "var(--color-bg)",
         },
         {
             name: "1",
-            color: "var(--color-text-muted)",
+            color: "var(--color-bg)",
         },
         {
             name: "2",
-            color: "var(--color-text-muted)",
+            color: "var(--color-bg)",
         },
         {
             name: "accent",
-            color: "var(--color-text-muted)",
+            color: "var(--color-bg)",
         }
     ]);
 
@@ -103,19 +103,19 @@ function createColorStore() {
                 },
                 {
                     name: "text",
-                    color: "var(--color-text)",
+                    color: "var(--color-bg)",
                 },
                 {
                     name: "1",
-                    color: "var(--color-text-muted)",
+                    color: "var(--color-bg)",
                 },
                 {
                     name: "2",
-                    color: "var(--color-text-muted)",
+                    color: "var(--color-bg)",
                 },
                 {
                     name: "accent",
-                    color: "var(--color-text-muted)",
+                    color: "var(--color-bg)",
                 }
             ];
 
