@@ -2,7 +2,10 @@
     import { colorStore } from "$lib/stores/colorStore.svelte.js";
     import { paramStore } from "$lib/stores/paramStore.svelte.js";
     import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
-    import PreviewSite from "$lib/components-ide/PreviewSite.svelte";
+    import PreviewSite from "./PreviewSite.svelte";
+    import ImageLoader from "./ImageLoader.svelte";
+    import Palette from "./Palette.svelte";
+    import Selections from "./Raw.svelte";
 
     import eyeOpen from "$lib/icons/eye-open.svg?raw";
     import eyeClose from "$lib/icons/eye-close.svg?raw";
@@ -10,11 +13,11 @@
     /*
     Layout structure:
     ┌──────────────┬──────────────────────────────┐
-    │  .pane 0     │  .pane 1                     │
+    │  .pane 0     │  .pane 2                     │
     │  top-left    │  top-right                   │
     │              │                              │
     ├── divider-v ─┼── divider-v ─────────────────┤ 
-    │  .pane 2     │  .pane 3                     │ 
+    │  .pane 1     │  .pane 3                     │ 
     │  bottom-left │  bottom-right                │ 
     └──────────────┴──────────────────────────────┘
                 
@@ -32,14 +35,18 @@
 
     $effect(() => {
         const i = phaseStore.phase;
+        // console.log("Running effect with i === " + i);
+        // User has uploaded an image. Show the palette and site settings.
+        // Keep the site preview hidden.
         if (i === 1) {
             awaitingLaunch[1] = false;
-            awaitingLaunch[2] = false;
+            awaitingLaunch[2] = true;
             awaitingLaunch[3] = false;
             focus = 1;
         }
+        // User has selected a color. Show the site preview.
         if (i === 2) {
-            focus = 2;
+            awaitingLaunch[2] = false;
         }
     });
 
@@ -120,11 +127,11 @@
   Layout structure (column-first):
 
     ┌──────────────┬──────────────────────────────┐
-    │  .pane 1     │  .pane 2                     │
+    │  .pane 0     │  .pane 2                     │
     │  top-left    │  top-right                   │
     │              │                              │
     ├── divider-v ─┼── divider-v ─────────────────┤  ← both share draggingV
-    │  .pane 3     │  .pane 4                     │    and hoveringV; hover or
+    │  .pane 1     │  .pane 3                     │    and hoveringV; hover or
     │  bottom-left │  bottom-right                │    drag either to affect both
     └──────────────┴──────────────────────────────┘
                    ↑
@@ -138,7 +145,11 @@
 <div class="shell" bind:this={shellEl}>
     <!-- ── Left column ──────────────────────────────────────────────── -->
     <div class="col" style="width: {leftWidth}%;">
-        <div class="pane" style="height: {100 - bottomHeight}%;">
+        <div
+            class="pane"
+            class:pane-focused={focus === 0}
+            style="height: {100 - bottomHeight}%;"
+        >
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div
@@ -151,18 +162,9 @@
                 </button>
             </div>
 
-            {#if paneVisible[0]}
-                <div class="pane-body">
-                    <span class="label">Navigation</span>
-                    <p>Width: <strong>{leftWidth.toFixed(1)}%</strong></p>
-                    <ul>
-                        <li>Item Alpha</li>
-                        <li>Item Beta</li>
-                        <li>Item Gamma</li>
-                        <li>Item Delta</li>
-                    </ul>
-                </div>
-            {/if}
+            <div class="pane-body" class:hidden={!paneVisible[0]}>
+                <ImageLoader />
+            </div>
         </div>
 
         <!-- Vertical divider — draggable, governs bottomHeight for BOTH columns -->
@@ -175,7 +177,11 @@
             aria-label="Resize top / bottom"
         ></div>
 
-        <div class="pane" style="height: {bottomHeight}%;">
+        <div
+            class="pane"
+            class:pane-focused={focus === 1}
+            style="height: {bottomHeight}%;"
+        >
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div
@@ -189,19 +195,14 @@
                 </button>
             </div>
 
-            {#if paneVisible[1]}
-                <div class="pane-body">
-                    {#if awaitingLaunch[1]}
-                        <h3>Waiting for Image upload</h3>
-                        <p>Please upload an image to get started.</p>
-                    {:else}
-                        <span class="label">Palette goes here</span>
-                        <p>
-                            Height: <strong>{bottomHeight.toFixed(1)}%</strong>
-                        </p>
-                    {/if}
-                </div>
-            {/if}
+            <div class="pane-body" class:hidden={!paneVisible[1]}>
+                {#if awaitingLaunch[1]}
+                    <h3>Waiting for Image upload</h3>
+                    <p>Please upload an image to get started.</p>
+                {:else}
+                    <Palette />
+                {/if}
+            </div>
         </div>
     </div>
     <!-- /col left -->
@@ -220,7 +221,11 @@
 
     <!-- ── Right column ─────────────────────────────────────────────── -->
     <div class="col" style="width: {100 - leftWidth}%;">
-        <div class="pane" style="height: {100 - bottomHeight}%;">
+        <div
+            class="pane"
+            class:pane-focused={focus === 2}
+            style="height: {100 - bottomHeight}%;"
+        >
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div
@@ -232,27 +237,26 @@
                     {@html paneVisible[2] ? eyeOpen : eyeClose}
                 </button>
             </div>
-            {#if paneVisible[2]}
-                <div class="pane-body">
-                    {#if awaitingLaunch[2]}
-                        <h3>Waiting for Image upload</h3>
-                        <p>Please upload an image to get started.</p>
-                    {:else}
-                        <PreviewSite
-                            background={tailoredColors[0].color}
-                            backgroundSubtle={tailoredColors[1].color}
-                            text={tailoredColors[2].color}
-                            primary={tailoredColors[3].color}
-                            secondary={tailoredColors[4].color}
-                            accent={tailoredColors[5].color}
-                            muteStrength={paramStore.params[0].cur ?? 0.5}
-                            typeScale={paramStore.params[1].cur ?? 1.2}
-                            borderWidth={paramStore.params[2].cur ?? 3}
-                            borderRadius={paramStore.params[3].cur ?? 10}
-                        />
-                    {/if}
-                </div>
-            {/if}
+
+            <div class="pane-body" class:hidden={!paneVisible[2]}>
+                {#if awaitingLaunch[2]}
+                    <h3>Waiting for Image upload</h3>
+                    <p>Please upload an image to get started.</p>
+                {:else}
+                    <PreviewSite
+                        background={tailoredColors[0].color}
+                        backgroundSubtle={tailoredColors[1].color}
+                        text={tailoredColors[2].color}
+                        primary={tailoredColors[3].color}
+                        secondary={tailoredColors[4].color}
+                        accent={tailoredColors[5].color}
+                        muteStrength={paramStore.params[0].cur ?? 0.5}
+                        typeScale={paramStore.params[1].cur ?? 1.2}
+                        borderWidth={paramStore.params[2].cur ?? 3}
+                        borderRadius={paramStore.params[3].cur ?? 10}
+                    />
+                {/if}
+            </div>
         </div>
 
         <!-- Vertical divider — also draggable; shares bottomHeight and hoveringV
@@ -266,7 +270,11 @@
             aria-label="Resize top / bottom"
         ></div>
 
-        <div class="pane" style="height: {bottomHeight}%;">
+        <div
+            class="pane"
+            class:pane-focused={focus === 3}
+            style="height: {bottomHeight}%;"
+        >
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div
@@ -280,28 +288,21 @@
                 </button>
             </div>
 
-            {#if paneVisible[3]}
-                <div class="pane-body">
-                    {#if awaitingLaunch[2]}
-                        <h3>Waiting for Image upload</h3>
-                        <p>Please upload an image to get started.</p>
-                    {:else}
-                        <span class="label">Logs / Output</span>
-                        <code class="log-line"
-                            >[info] App started at 09:41:00</code
-                        >
-                        <code class="log-line"
-                            >[debug] Fetching data from /api/items</code
-                        >
-                        <code class="log-line"
-                            >[info] 200 OK — 42 items returned</code
-                        >
-                        <code class="log-line"
-                            >[warn] Cache miss on key "user:99"</code
-                        >
-                    {/if}
-                </div>
-            {/if}
+            <div class="pane-body" class:hidden={!paneVisible[3]}>
+                <p>
+                    Dude, I'm going to need to migrate Site Settings to its own
+                    svelte component, and fix the weird formatting when the
+                    color definitions go off the bottom of the page. Not really
+                    a huge fan of that. Maybe it just continues down the page
+                    vertically?
+                </p>
+                {#if awaitingLaunch[3]}
+                    <h3>Waiting for Image upload</h3>
+                    <p>Please upload an image to get started.</p>
+                {:else}
+                    <Selections />
+                {/if}
+            </div>
         </div>
     </div>
     <!-- /col right -->
@@ -347,6 +348,10 @@
         overflow: hidden;
         background: var(--bg);
     }
+    .pane-focused {
+        outline: 1px solid var(--primary-hover);
+        outline-offset: -2px;
+    }
 
     .pane-header {
         padding: 0.375rem 0.75rem;
@@ -372,6 +377,11 @@
         flex-direction: column;
         gap: 0.375rem;
     }
+
+    .hidden {
+        display: none;
+    }
+
     /* 
     This enables the pane-body to be scrollable within. Otherwise, flex rules cascade,
     causing it to shrink the content outside of the pane, thus giving it nothing to scroll.

@@ -10,9 +10,21 @@ And webknobs
 
 
 
-Final version things to add:
-    - Border hovered around the element the user should focus on (just like, 1px)
-    - 
+
+
+
+
+End of 5/15/26 (pre-visual-overhaul):
+Need to:
+- Instead of hard-coded "Waiting for Image Upload", we just need some status from phaseStore that says "waiting for [x]" to display on relevent components 
+    - Eventually, we eliminate the "focus" outline entirely
+- Migrate "Site Settings" to its own svelte component
+- Let the bottom two panels scroll down as far as you goddang want 
+    - (i.e. instead of clipping the vertical overflow, extend it down the page)
+- Add in "Tailored" colors 
+- Tweak them with Chroma 
+- Add in an export 
+- Add in a "view preview" 
 
 
 

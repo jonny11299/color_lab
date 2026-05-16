@@ -5,9 +5,20 @@
 
 import { imageStore } from "$lib/stores/imageStore.svelte.js";
 
+const maxColors = imageStore.maxColorsToExtract;
+
 let uploadStartTime = Date.now();
 let img = null; // the Image() object saved to this file, being operated upon.
 
+const firstLogMessage = 'Begin Cube Processing Log:'
+let logMessage = firstLogMessage;
+function initNewLogMessage() {
+    logMessage = firstLogMessage;
+}
+function addToLog(m) {
+    logMessage += '\n'
+    logMessage += m;
+}
 
 // returns metadata once loaded
 export async function uploadImage(file) {
@@ -23,6 +34,9 @@ export async function uploadImage(file) {
     uploadStartTime = Date.now();
     console.log("Uploading ", file.name);
     imageStore.setStatus('Uploading Image');
+
+
+    initNewLogMessage();
 
     // Convert it into a format for datamoshing (base64 string)
     const base64image = await toBase64(file);
@@ -42,16 +56,16 @@ export async function uploadImage(file) {
         img.src = base64image
     });
 
-    console.log(`Upload for ${file.name} completed in ${Date.now() - uploadStartTime} ms`);
+    addToLog(`Upload for ${file.name} completed in ${Date.now() - uploadStartTime} ms`);
     return metadata;
 }
 
 export async function toBase64(imageFile) {
-    console.log("Converting to base 64...");
+    addToLog("Converting to base 64...");
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (e) => {
-            console.log("Converted to base 64.");
+            addToLog("Converted to base 64.");
             resolve(e.target.result);
         }
         reader.onerror = () => reject(new Error('Failed to convert to Base 64'));
@@ -66,7 +80,7 @@ export function readPixels() {
         let height = img.height;
 
         imageStore.setStatus('Reading pixels...');
-        console.log("Reading pixels...");
+        addToLog("Reading pixels...");
 
 
         const canvas = new OffscreenCanvas(img.width, img.height);
@@ -84,11 +98,13 @@ export function readPixels() {
             pixels.push({ r, g, b, a });
         }
 
-        console.log(`Total pixels: ${pixels.length}`);
-        console.log('First 10 pixels:', pixels.slice(0, 10));
-        console.log('All pixels:', pixels);
+        addToLog(`Total pixels: ${pixels.length}`);
+        addToLog('First 10 pixels:\n' + JSON.stringify(pixels.slice(0, 10)));
+        // addToLog('All pixels:', pixels);
 
-        extractColors(pixels);
+        const binWidth = imageStore.binWidth
+
+        extractColors(pixels, binWidth, maxColors);
     }
 }
 
@@ -137,8 +153,9 @@ function extractColors(pixels, t = 30, numColors = 200) {
     }
 
 
-    console.log(cube);
-    console.log(`Time elapsed: ${Date.now() - startTime} ms`);
+    // addToLog(cube);
+    addToLog("Created cube.");
+    addToLog(`Time elapsed: ${Date.now() - startTime} ms`);
 
     // Increment cube's counts for each pixel
     // lock is for testing, so I can see each result
@@ -167,7 +184,7 @@ function extractColors(pixels, t = 30, numColors = 200) {
 
         // look up the index in the cube
         // use len here, not t
-        // console.log(`len === ${len}`);
+        // addToLog(`len === ${len}`);
         const index = ri * len * len + gi * len + bi;
 
         // assert that the color here matches radj - rerror
@@ -187,23 +204,23 @@ function extractColors(pixels, t = 30, numColors = 200) {
 
         } catch (error) {
             console.error(error);
-            console.log(`r, g, b === ${p.r}, ${p.g}, ${p.b}`);
-            console.log(`r, g, b (adj) === ${radj}, ${gadj}, ${badj}`);
-            console.log(`r, g, b (bin) === ${rbin}, ${gbin}, ${bbin}`);
-            console.log(`r, g, b (err) === ${rerror}, ${gerror}, ${berror}`);
-            console.log(`index === ${index}, cube.length === ${cube.length}`);
+            console.error(`r, g, b === ${p.r}, ${p.g}, ${p.b}`);
+            console.error(`r, g, b (adj) === ${radj}, ${gadj}, ${badj}`);
+            console.error(`r, g, b (bin) === ${rbin}, ${gbin}, ${bbin}`);
+            console.error(`r, g, b (err) === ${rerror}, ${gerror}, ${berror}`);
+            console.error(`index === ${index}, cube.length === ${cube.length}`);
             // return;
         }
 
 
         if (sample % printEveryXSamples === 0) {
             // console.error(error);
-            console.log(`Sample === ${sample} / ${pixels.length} total samples.`);
-            console.log(`${100 * (sample / pixels.length)}% done.`);
-            console.log(`r, g, b === ${p.r}, ${p.g}, ${p.b}`);
-            console.log(`r, g, b (adj) === ${radj}, ${gadj}, ${badj}`);
-            console.log(`r, g, b (err) === ${rerror}, ${gerror}, ${berror}`);
-            console.log(`index === ${index}, cube.length === ${cube.length}`);
+            addToLog(`Sample === ${sample} / ${pixels.length} total samples.`);
+            addToLog(`${100 * (sample / pixels.length)}% done.`);
+            addToLog(`r, g, b === ${p.r}, ${p.g}, ${p.b}`);
+            addToLog(`r, g, b (adj) === ${radj}, ${gadj}, ${badj}`);
+            addToLog(`r, g, b (err) === ${rerror}, ${gerror}, ${berror}`);
+            addToLog(`index === ${index}, cube.length === ${cube.length}`);
 
         }
 
@@ -216,9 +233,11 @@ function extractColors(pixels, t = 30, numColors = 200) {
     }
 
 
+    addToLog("[results printed to console under 'Unsorted Cube:']")
+    console.log("Unsorted Cube:");
     console.log(cube);
-    console.log("Finished reading cube. Formatting now.");
-    console.log(`Time elapsed: ${Date.now() - startTime} ms`);
+    addToLog("Finished reading cube. Formatting now.");
+    addToLog(`Time elapsed: ${Date.now() - startTime} ms`);
 
     // correct error (could do this with only the selected colors, but whatever)
     for (let c of cube) {
@@ -245,19 +264,25 @@ function extractColors(pixels, t = 30, numColors = 200) {
         });
     }
 
-    console.log("Finished formatting cube. Results:");
+    addToLog("Finished formatting cube. Results:");
+    addToLog("[results printed to console under 'Sorted Cube:']")
+    console.log("Sorted cube:");
     console.log(sortedCube);
-    console.log(`Time elapsed: ${Date.now() - startTime} ms`);
+    addToLog(`Time elapsed: ${Date.now() - startTime} ms`);
 
     // currentCube = sortedCube;
     // paletteActions.style.display = 'flex';
     // saveJSON(sortedCube);
 
-    console.log("Formatting swatches");
-    writeSwatches(sortedCube);
+    addToLog("Trimming colors with no 'hits' from the image");
+    const trimmedCube = sortedCube.filter((c) => c.count > 0);
+
+    addToLog("Formatting swatches");
+    writeSwatches(trimmedCube);
 
     imageStore.setStatus("Done.");
-    console.log("Done.");
+    addToLog("Done.");
+    console.log(logMessage);
 }
 
 function writeSwatches(clusters) {
