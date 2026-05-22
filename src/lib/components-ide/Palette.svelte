@@ -44,12 +44,11 @@
             {copied ? "Copied!" : (hoveredHex ?? "l")}
         </div>
     </div>
-    -->
-    <p>Fix: returning non-existant items from the color cube</p>
     <p>
         Maybe add a little plus or minus button here for changing the size of
         each item
     </p>
+    -->
     <div class="swatchpalette">
         {#each swatches as s}
             <div

@@ -5,7 +5,7 @@
     import PreviewSite from "./PreviewSite.svelte";
     import ImageLoader from "./ImageLoader.svelte";
     import Palette from "./Palette.svelte";
-    import Selections from "./Raw.svelte";
+    import SiteSettings from "./SiteSettings.svelte";
 
     import eyeOpen from "$lib/icons/eye-open.svg?raw";
     import eyeClose from "$lib/icons/eye-close.svg?raw";
@@ -178,9 +178,9 @@
         ></div>
 
         <div
-            class="pane"
+            class="pane-bottom"
             class:pane-focused={focus === 1}
-            style="height: {bottomHeight}%;"
+            style="height: auto;"
         >
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -195,7 +195,7 @@
                 </button>
             </div>
 
-            <div class="pane-body" class:hidden={!paneVisible[1]}>
+            <div class="pane-body-bottom" class:hidden={!paneVisible[1]}>
                 {#if awaitingLaunch[1]}
                     <h3>Waiting for Image upload</h3>
                     <p>Please upload an image to get started.</p>
@@ -271,9 +271,9 @@
         ></div>
 
         <div
-            class="pane"
+            class="pane-bottom"
             class:pane-focused={focus === 3}
-            style="height: {bottomHeight}%;"
+            style="height: auto;"
         >
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -288,19 +288,11 @@
                 </button>
             </div>
 
-            <div class="pane-body" class:hidden={!paneVisible[3]}>
-                <p>
-                    Dude, I'm going to need to migrate Site Settings to its own
-                    svelte component, and fix the weird formatting when the
-                    color definitions go off the bottom of the page. Not really
-                    a huge fan of that. Maybe it just continues down the page
-                    vertically?
-                </p>
+            <div class="pane-body-bottom" class:hidden={!paneVisible[3]}>
                 {#if awaitingLaunch[3]}
-                    <h3>Waiting for Image upload</h3>
-                    <p>Please upload an image to get started.</p>
+                    {phaseStore.placeholder()}
                 {:else}
-                    <Selections />
+                    <SiteSettings />
                 {/if}
             </div>
         </div>
@@ -323,7 +315,7 @@
         flex-direction: row;
         width: 100%;
         height: 98vh; /* adjust to fit your layout — see comment above */
-        overflow: hidden;
+        overflow: visible;
         background: var(--bg);
         color: var(--text);
         user-select: none; /* prevents text selection during drag */
@@ -337,7 +329,7 @@
         display: flex;
         flex-direction: column;
         flex-shrink: 0;
-        overflow: hidden;
+        overflow: visible;
     }
 
     /* ── Panes ───────────────────────────────────────────────────────────── */
@@ -351,6 +343,16 @@
     .pane-focused {
         outline: 1px solid var(--primary-hover);
         outline-offset: -2px;
+    }
+
+    .pane-bottom {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        /* overflow: scroll; */
+        background: var(--bg);
+        overflow: visible;
+        margin-bottom: 5rem;
     }
 
     .pane-header {
@@ -372,6 +374,16 @@
         flex: 1;
         min-height: 0; /* ← this is the fix */
         overflow-y: scroll;
+        padding: 0.625rem 0.875rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.375rem;
+    }
+
+    .pane-body-bottom {
+        flex: 1;
+        min-height: 0; /* ← this is the fix */
+        overflow-y: visible;
         padding: 0.625rem 0.875rem;
         display: flex;
         flex-direction: column;

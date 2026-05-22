@@ -12,6 +12,16 @@ And webknobs
 
 
 
+using after high on 5/15:
+- love it, love the colors, feeling good & official
+- should be able to select pixel from image directly via hovering over 
+	(do I want to overlay some 'average' bitmap of the pixels? Or just 
+		raw pixels? Probably raw pixels, right? The palette gives 
+		the functionality of 'average')
+- The horizontal bars got off from each other for a bit; separated by 10px
+- Having a top 'bar' that is actually formatted nice will be killer
+	- should have 'file > (export, save, etc), help'
+
 
 
 End of 5/15/26 (pre-visual-overhaul):

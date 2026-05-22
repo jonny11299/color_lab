@@ -14,9 +14,25 @@
 
 function createPhaseStore() {
     let phase = $state(0);
+    let placeholder = $derived(() => {
+        if (phase === 0) {
+            return `<div><h3>Waiting for Image upload</h3>
+                <p>Please upload an image to get started.</p></div>`;
+        } else if (phase === 1) {
+            return `<div><h3>Waiting for color selection</h3>
+                <p>Select a color to view site preview.</p></div>`;
+        } else {
+            return `<div><h3>Waiting for complete color selection</h3>
+                <p>Select a full palette to get tailored edits.</p></div>`;
+        }
+    });
 
     return {
         get phase() { return phase },
+
+        get placeholder() {
+            return placeholder
+        },
 
         // 'i' is the max state we can advance to.
         // prevents repeat calls of the same function advancing past where it should.
