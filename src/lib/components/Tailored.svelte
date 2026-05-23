@@ -20,7 +20,7 @@
 
     // calculates the contrast between the two colors
     // first color is given by index, second by name.
-    // this is because we always calculate against bg-1 and bg-2,
+    // this is because we always calculate against bg-1 and surface,
     // for each color, so the selection makes sense here.
     // cl: [class to assign styling], value: [value of contrast]
     function calculateContrast(colorIndex1, colorName) {
@@ -30,12 +30,7 @@
 
             // guards against incorrectly-selected colors, or the event where we still have
             // the CSS variable inputted here
-            if (
-                c1 === null ||
-                c2 === null ||
-                c1.includes("var(--") ||
-                c2.includes("var(--")
-            ) {
+            if (c1 === null || c2 === null || c1.includes("var(--") || c2.includes("var(--")) {
                 console.error(`Couldn't find color for (${colorIndex1}, ${colorName}); got 
             (${c1}, ${c2}). `);
                 return {
@@ -45,10 +40,7 @@
             }
 
             // Muted for background-on-background:
-            if (
-                tailored[colorIndex1]?.name == "bg" ||
-                tailored[colorIndex1]?.name == "bg-2"
-            ) {
+            if (tailored[colorIndex1]?.name == "bg" || tailored[colorIndex1]?.name == "surface") {
                 return {
                     cl: "contrastSpanMuted",
                     value: chroma.contrast(c1, c2).toFixed(1),
@@ -100,7 +92,7 @@ accent on background — badge text
     <div class="colorRow">
         <h3>Contrast:</h3>
         <h4>bg:</h4>
-        <h4>bg-2:</h4>
+        <h4>surface:</h4>
     </div>
     {#each tailored as t, j}
         <div class="colorRow">
@@ -109,32 +101,31 @@ accent on background — badge text
             <div
                 class="selections"
                 style="background: {t.color}; 
-                border-color: {tailoredIndex === j
-                    ? `var(--text)`
-                    : `var(--bg)`};
+                border-color: {tailoredIndex === j ? `var(--text)` : `var(--bg)`};
                  border-width: {tailoredIndex === j ? `3px` : `0`}"
                 onclick={() => selectIndex(j)}
             >
                 {t.name}
             </div>
             <!-- Formatting contrast ratios -->
-            <span class={calculateContrast(j, "bg").cl}
-                >{calculateContrast(j, "bg").value}</span
-            >
-            <span class={calculateContrast(j, "bg-2").cl}
-                >{calculateContrast(j, "bg-2").value}</span
-            >
+            <span class={calculateContrast(j, "bg").cl}>{calculateContrast(j, "bg").value}</span>
+            <span class={calculateContrast(j, "surface").cl}>{calculateContrast(j, "surface").value}</span>
         </div>
     {:else}{/each}
 
     <!-- Sliders -->
-        <!-- Going to have to make this typeable, with an input: -->
+    <!-- Going to have to make this typeable, with an input: -->
     {#each paramStore.params as p, i}
         <div class="paramRow">
             <div class="paramItem">{p.name}: {p.cur.toFixed(paramStore.getFixed(i))}</div>
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <span class="futureButton" onclick={() => {paramStore.upByIndex(i)}}>up</span>
+            <span
+                class="futureButton"
+                onclick={() => {
+                    paramStore.upByIndex(i);
+                }}>up</span
+            >
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <span class="futureButton" onclick={() => paramStore.downByIndex(i)}>down</span>

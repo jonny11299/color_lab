@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from "svelte";
     import { colorStore } from "$lib/stores/colorStore.svelte.js";
     import { paramStore } from "$lib/stores/paramStore.svelte.js";
     import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
@@ -9,6 +10,16 @@
 
     import eyeOpen from "$lib/icons/eye-open.svg?raw";
     import eyeClose from "$lib/icons/eye-close.svg?raw";
+    import PlaceholderMessage from "./PlaceholderMessage.svelte";
+
+    /*
+    // Enable this for production, to make sure we reset from the start every time.
+    // Vite will hot-reload with some variables out-of-place sometimes, so this can ensure a full reset.
+    onMount(() => {
+        phaseStore.reset();
+        colorStore.reset();
+    });
+    */
 
     /*
     Layout structure:
@@ -47,6 +58,10 @@
         // User has selected a color. Show the site preview.
         if (i === 2) {
             awaitingLaunch[2] = false;
+        }
+        // All colors selected, focus site settings
+        if (i === 3) {
+            focus = -1;
         }
     });
 
@@ -121,6 +136,15 @@
         window.addEventListener("mousemove", onMouseMove);
         window.addEventListener("mouseup", stopDrag);
     }
+
+    function getColor(i) {
+        if (colorStore.hoveredPreview && colorStore.curTailoredIndex === i) {
+            // hovering a color for our current index, swap it in for the site preview
+            return colorStore.hoveredPreview;
+        } else {
+            return tailoredColors[i].color;
+        }
+    }
 </script>
 
 <!--
@@ -145,17 +169,10 @@
 <div class="shell" bind:this={shellEl}>
     <!-- ── Left column ──────────────────────────────────────────────── -->
     <div class="col" style="width: {leftWidth}%;">
-        <div
-            class="pane"
-            class:pane-focused={focus === 0}
-            style="height: {100 - bottomHeight}%;"
-        >
+        <div class="pane" class:pane-focused={focus === 0} style="height: {100 - bottomHeight}%;">
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <div
-                class="pane-header"
-                onclick={() => (paneVisible[0] = !paneVisible[0])}
-            >
+            <div class="pane-header" onclick={() => (paneVisible[0] = !paneVisible[0])}>
                 Image Uploader
                 <button class="eye-btn">
                     {@html paneVisible[0] ? eyeOpen : eyeClose}
@@ -177,17 +194,10 @@
             aria-label="Resize top / bottom"
         ></div>
 
-        <div
-            class="pane-bottom"
-            class:pane-focused={focus === 1}
-            style="height: auto;"
-        >
+        <div class="pane-bottom" class:pane-focused={focus === 1} style="height: auto;">
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <div
-                class="pane-header"
-                onclick={() => (paneVisible[1] = !paneVisible[1])}
-            >
+            <div class="pane-header" onclick={() => (paneVisible[1] = !paneVisible[1])}>
                 Palette
 
                 <button class="eye-btn">
@@ -197,8 +207,7 @@
 
             <div class="pane-body-bottom" class:hidden={!paneVisible[1]}>
                 {#if awaitingLaunch[1]}
-                    <h3>Waiting for Image upload</h3>
-                    <p>Please upload an image to get started.</p>
+                    <PlaceholderMessage />
                 {:else}
                     <Palette />
                 {/if}
@@ -212,26 +221,14 @@
     Because this lives at the top level of the shell (not inside a row),
     it naturally spans the full height including through the bottom panes.
   -->
-    <div
-        class="divider divider-h {draggingH ? 'active' : ''}"
-        onmousedown={startDragH}
-        role="separator"
-        aria-label="Resize left / right"
-    ></div>
+    <div class="divider divider-h {draggingH ? 'active' : ''}" onmousedown={startDragH} role="separator" aria-label="Resize left / right"></div>
 
     <!-- ── Right column ─────────────────────────────────────────────── -->
     <div class="col" style="width: {100 - leftWidth}%;">
-        <div
-            class="pane"
-            class:pane-focused={focus === 2}
-            style="height: {100 - bottomHeight}%;"
-        >
+        <div class="pane" class:pane-focused={focus === 2} style="height: {100 - bottomHeight}%;">
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <div
-                class="pane-header"
-                onclick={() => (paneVisible[2] = !paneVisible[2])}
-            >
+            <div class="pane-header" onclick={() => (paneVisible[2] = !paneVisible[2])}>
                 Preview Site
                 <button class="eye-btn">
                     {@html paneVisible[2] ? eyeOpen : eyeClose}
@@ -240,9 +237,9 @@
 
             <div class="pane-body" class:hidden={!paneVisible[2]}>
                 {#if awaitingLaunch[2]}
-                    <h3>Waiting for Image upload</h3>
-                    <p>Please upload an image to get started.</p>
+                    <PlaceholderMessage />
                 {:else}
+                    <!-- doesn't implement hover-preview over "Adjust"
                     <PreviewSite
                         background={tailoredColors[0].color}
                         backgroundSubtle={tailoredColors[1].color}
@@ -250,6 +247,20 @@
                         primary={tailoredColors[3].color}
                         secondary={tailoredColors[4].color}
                         accent={tailoredColors[5].color}
+                        muteStrength={paramStore.params[0].cur ?? 0.5}
+                        typeScale={paramStore.params[1].cur ?? 1.2}
+                        borderWidth={paramStore.params[2].cur ?? 3}
+                        borderRadius={paramStore.params[3].cur ?? 10}
+                    />
+                    does implement hover-preview over "Adjust":
+                    -->
+                    <PreviewSite
+                        background={getColor(0)}
+                        backgroundSubtle={getColor(1)}
+                        text={getColor(2)}
+                        primary={getColor(3)}
+                        secondary={getColor(4)}
+                        accent={getColor(5)}
                         muteStrength={paramStore.params[0].cur ?? 0.5}
                         typeScale={paramStore.params[1].cur ?? 1.2}
                         borderWidth={paramStore.params[2].cur ?? 3}
@@ -270,17 +281,10 @@
             aria-label="Resize top / bottom"
         ></div>
 
-        <div
-            class="pane-bottom"
-            class:pane-focused={focus === 3}
-            style="height: auto;"
-        >
+        <div class="pane-bottom" class:pane-focused={focus === 3} style="height: auto;">
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
-            <div
-                class="pane-header"
-                onclick={() => (paneVisible[3] = !paneVisible[3])}
-            >
+            <div class="pane-header" onclick={() => (paneVisible[3] = !paneVisible[3])}>
                 Site Settings
 
                 <button class="eye-btn">
@@ -290,7 +294,7 @@
 
             <div class="pane-body-bottom" class:hidden={!paneVisible[3]}>
                 {#if awaitingLaunch[3]}
-                    {phaseStore.placeholder()}
+                    <PlaceholderMessage />
                 {:else}
                     <SiteSettings />
                 {/if}
@@ -469,18 +473,6 @@
 
     p {
         margin: 0;
-        font-size: 0.8125rem;
-    }
-
-    ul {
-        margin: 0;
-        padding-left: 1rem;
-    }
-
-    li {
-        padding: 0.1875rem 0;
-        font-size: 0.8125rem;
-        border-bottom: 1px solid var(--surface);
     }
 
     .card-row {

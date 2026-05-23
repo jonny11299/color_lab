@@ -10,11 +10,23 @@
     let selectedSwatch = $derived(colorStore.curIndex);
 
     let launchedPreviewYet = $state(false);
+    let selectedAllColors = $state(false);
+
+    $effect(() => {
+        let i = colorStore.curIndex;
+        if (!selectedAllColors) {
+            if (!colorStore.tailored.some((t) => t.color.includes("var"))) {
+                selectedAllColors = true;
+                console.log("Setting selectAllColors to True");
+                phaseStore.advance(3);
+            }
+        }
+    });
 
     function handleClick(hex) {
         copyHex(hex);
         colorStore.setColor(selectedSwatch, hex);
-        colorStore.iterate();
+        if (phaseStore.phase < 3) colorStore.iterate(); // we should stop auto-iterating the selections upon clicking palette, after all colors are selected
 
         console.log("selection now " + selectedSwatch);
 
@@ -27,6 +39,11 @@
         navigator.clipboard.writeText(hex);
         copied = hex;
         setTimeout(() => (copied = null), 1500);
+    }
+
+    function setHoveredHex(hex) {
+        hoveredHex = hex;
+        colorStore.setHoveredPreview(hex);
     }
 </script>
 
@@ -55,8 +72,8 @@
                 class="swatch"
                 style="background-color: {s.hex}"
                 onclick={() => handleClick(s.hex)}
-                onmouseenter={() => (hoveredHex = s.hex)}
-                onmouseleave={() => (hoveredHex = null)}
+                onmouseenter={() => setHoveredHex(s.hex)}
+                onmouseleave={() => setHoveredHex(null)}
                 role="button"
                 tabindex="0"
             ></div>

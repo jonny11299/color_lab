@@ -3,6 +3,9 @@ function createColorStore() {
 
     let curIndex = $state(0); // iterator for the colorstore
     let curTailoredIndex = $state(0);
+    let cur = $derived(tailored[curTailoredIndex]);
+
+    let hoveredPreview = $state(null); // Stores a temporary preview color. "Adjust.svelte" changes this value, "ColorSelections.svelte" reads it.
 
     let selections = $state([
         {
@@ -10,7 +13,7 @@ function createColorStore() {
             color: "var(--bg)",
         },
         {
-            name: "bg-2",
+            name: "surface",
             color: "var(--bg)",
         },
         {
@@ -38,7 +41,7 @@ function createColorStore() {
             color: "var(--bg)",
         },
         {
-            name: "bg-2",
+            name: "surface",
             color: "var(--bg)",
         },
         {
@@ -60,16 +63,25 @@ function createColorStore() {
     ]);
 
 
+
+
     return {
         get selections() { return selections; },
         get tailored() { return tailored; },
         get curIndex() { return curIndex; },
         get curTailoredIndex() { return curTailoredIndex },
 
+        get cur() { return cur },
+        get hoveredPreview() { return hoveredPreview },
+
 
         setColor: (i, c) => {
             selections[i % selections.length].color = c;
             tailored[i % selections.length].color = c; // eventually will set this differently
+        },
+
+        setCurrentColorTailored: (c) => {
+            tailored[curTailoredIndex].color = c;
         },
 
         // iterates both selected and tailored colors
@@ -90,6 +102,11 @@ function createColorStore() {
             curIndex = curTailoredIndex;
         },
 
+        // c should be a hex string here.
+        setHoveredPreview: (c) => {
+            hoveredPreview = c;
+        },
+
 
         reset: () => {
             selections = [
@@ -98,7 +115,7 @@ function createColorStore() {
                     color: "var(--bg)",
                 },
                 {
-                    name: "bg-2",
+                    name: "surface",
                     color: "var(--bg)",
                 },
                 {
@@ -125,7 +142,7 @@ function createColorStore() {
                     color: "var(--bg)",
                 },
                 {
-                    name: "bg-2",
+                    name: "surface",
                     color: "var(--bg)",
                 },
                 {

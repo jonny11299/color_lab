@@ -59,6 +59,7 @@
 <div class="container">
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <h3>Image</h3>
+    <p>Should I have examples? Save / load? Nah... just upload from the user.</p>
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <div
         class="dropzone"

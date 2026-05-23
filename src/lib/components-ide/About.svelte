@@ -3,16 +3,11 @@
 
 <div class="container">
     <h3 class="title">About:</h3>
+    <p>Click colors from the palette to add them to the Selections & Contrast</p>
     <p>
-        Click colors from the palette to add them to the Selections & Contrast
-    </p>
-    <p>
-        <a href="https://www.w3.org/TR/WCAG21/">WCAG Guidelines</a> suggest contrast
-        ratios of 4.5 or above for accessibly readable text.
+        <a href="https://www.w3.org/TR/WCAG21/" target="_blank">WCAG Guidelines</a> suggest contrast ratios of 4.5 or above for accessibly readable text.
     </p>
 </div>
-
-<p></p>
 
 <style>
     .title {
@@ -30,5 +25,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+
+        overflow: hidden;
     }
 </style>

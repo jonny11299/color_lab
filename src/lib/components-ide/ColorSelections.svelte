@@ -19,16 +19,29 @@
             let c1 = tailored[colorIndex1]?.color ?? null;
             let c2 = tailored.find((c) => c.name === colorName)?.color ?? null;
 
+            // Ensures contrast values are updated for hovered previews
+            if (colorStore.hoveredPreview) {
+                // ensures the 'c1' contrast value is updated based on hovering over "Adjust.svelte"
+                if (colorStore.curTailoredIndex === colorIndex1) c1 = colorStore.hoveredPreview;
+
+                // ensures the bg and surface contrast value is updated based on hovering over "Adjust.svelte"
+                if (colorStore.curTailoredIndex === 0) {
+                    // re-selection bg
+                    if (colorName === "bg") {
+                        c2 = colorStore.hoveredPreview;
+                    }
+                } else if (colorStore.curTailoredIndex === 1) {
+                    // re-selecting surface
+                    if (colorName === "surface") {
+                        c2 = colorStore.hoveredPreview;
+                    }
+                }
+            }
+
             // guards against incorrectly-selected colors, or the event where we still have
             // the CSS variable inputted here
-            if (
-                c1 === null ||
-                c2 === null ||
-                c1.includes("var(--") ||
-                c2.includes("var(--")
-            ) {
-                console.error(`Couldn't find color for (${colorIndex1}, ${colorName}); got 
-            (${c1}, ${c2}). `);
+            if (c1 === null || c2 === null || c1.includes("var(--") || c2.includes("var(--")) {
+                // console.error(`Couldn't find color for (${colorIndex1}, ${colorName}); got (${c1}, ${c2}). `);
                 return {
                     cl: "none",
                     value: "",
@@ -36,10 +49,7 @@
             }
 
             // Muted for background-on-background:
-            if (
-                tailored[colorIndex1]?.name == "bg" ||
-                tailored[colorIndex1]?.name == "bg-2"
-            ) {
+            if (tailored[colorIndex1]?.name == "bg" || tailored[colorIndex1]?.name == "surface") {
                 return {
                     cl: "contrastSpanMuted",
                     value: chroma.contrast(c1, c2).toFixed(1),
@@ -62,6 +72,10 @@
             console.log(colorStore.curTailoredIndex);
         }
     }
+
+    function getRenderColor(t, j) {
+        return colorStore.hoveredPreview && colorStore.curTailoredIndex === j ? colorStore.hoveredPreview : t.color;
+    }
 </script>
 
 <div class="container">
@@ -72,7 +86,7 @@
         <div class="name"><h4>name:</h4></div>
         <div class="name"><h4>color:</h4></div>
         <div class="name"><h4>bg:</h4></div>
-        <div class="name"><h4>bg-2:</h4></div>
+        <div class="name"><h4>surface:</h4></div>
         {#each tailored as t, j}
             <div class="name">{t.name}</div>
             <!-- The color square itself-->
@@ -80,10 +94,8 @@
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div
                 class="swatch"
-                style="background: {t.color}; 
-                border-color: {tailoredIndex === j
-                    ? `var(--text)`
-                    : `var(--bg)`};
+                style="background: {getRenderColor(t, j)}; 
+                border-color: {tailoredIndex === j ? `var(--text)` : `var(--bg)`};
                  border-width: {tailoredIndex === j ? `3px` : `0`}"
                 onclick={() => selectIndex(j)}
             ></div>
@@ -92,8 +104,8 @@
             <div class={calculateContrast(j, "bg").cl}>
                 {calculateContrast(j, "bg").value}
             </div>
-            <div class={calculateContrast(j, "bg-2").cl}>
-                {calculateContrast(j, "bg-2").value}
+            <div class={calculateContrast(j, "surface").cl}>
+                {calculateContrast(j, "surface").value}
             </div>
         {/each}
     </div>
@@ -110,7 +122,7 @@
         border-radius: 0;
         padding: 1rem;
         max-width: 20rem;
-        min-width: 12rem;
+        min-width: 18rem;
 
         display: flex;
         flex-direction: column;

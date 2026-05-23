@@ -1,3 +1,5 @@
+import chroma from "chroma-js";
+
 function createImageStore() {
     let status = $state('idle');      // 'idle' | 'processing' | 'done' | 'error'
     let progress = $state(0);         // 0-100 (float)
@@ -22,7 +24,14 @@ function createImageStore() {
 
         setStatus: (v) => status = v,
         setProgress: (v) => progress = v,
-        setSwatches: (v) => swatches = v,
+        setSwatches: (v) => {
+            console.log(JSON.stringify(v));
+            v = v.sort((a, b) => {
+                return chroma(a.hex).luminance() > chroma(b.hex).luminance();
+            });
+            console.log(JSON.stringify(v));
+            swatches = v
+        },
         setDimensions: (v) => dimensions = v,
         setError: (v) => error = v,
         reset: () => {
