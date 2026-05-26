@@ -7,6 +7,10 @@ function createColorStore() {
 
     let hoveredPreview = $state(null); // Stores a temporary preview color. "Adjust.svelte" changes this value, "ColorSelections.svelte" reads it.
 
+    let maxQueueSize = 100;
+    let undoQueue = $state([]);
+    let redoQueue = $state([]);
+
     let selections = $state([
         {
             name: "bg",
@@ -76,11 +80,19 @@ function createColorStore() {
 
 
         setColor: (i, c) => {
+            undoQueue.push(tailored.map(t => ({ ...t }))); // pushing deep copy
+            redoQueue = [];
+            if (undoQueue.length > maxQueueSize) undoQueue.shift();
+
             selections[i % selections.length].color = c;
             tailored[i % selections.length].color = c; // eventually will set this differently
         },
 
         setCurrentColorTailored: (c) => {
+            undoQueue.push(tailored.map(t => ({ ...t }))); // pushing deep copy
+            redoQueue = [];
+            if (undoQueue.length > maxQueueSize) undoQueue.shift();
+
             tailored[curTailoredIndex].color = c;
         },
 
@@ -106,6 +118,24 @@ function createColorStore() {
         setHoveredPreview: (c) => {
             hoveredPreview = c;
         },
+
+        // go back one, return to 'redo'
+        undo: () => {
+            if (undoQueue.length > 0) {
+                // console.log("UNdoing");
+                redoQueue.push(tailored.map(t => ({ ...t })));
+                tailored = undoQueue.pop();
+            }
+        },
+
+        redo: () => {
+            if (redoQueue.length > 0) {
+                // console.log("Redoing");
+                undoQueue.push(tailored.map(t => ({ ...t })));
+                tailored = redoQueue.pop();
+            }
+        },
+
 
 
         reset: () => {

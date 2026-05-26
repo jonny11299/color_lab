@@ -39,12 +39,8 @@
      * muteStrength = 1 → text-muted at 55%, text-hint at 35%
      * Computed in script to avoid relying on calc() inside color-mix().
      */
-    let textMuted = $derived(
-        `color-mix(in srgb, ${text} ${Math.round(100 - muteStrength * 45)}%, transparent)`,
-    );
-    let textHint = $derived(
-        `color-mix(in srgb, ${text} ${Math.round(100 - muteStrength * 65)}%, transparent)`,
-    );
+    let textMuted = $derived(`color-mix(in srgb, ${text} ${Math.round(100 - muteStrength * 45)}%, transparent)`);
+    let textHint = $derived(`color-mix(in srgb, ${text} ${Math.round(100 - muteStrength * 65)}%, transparent)`);
 
     /*
      * Border and radius passed as px strings so CSS variables carry units.
@@ -128,10 +124,7 @@
         <h1 class="sv-h1">
             Analytics that <em class="sv-em">actually</em> make sense
         </h1>
-        <p class="sv-lead">
-            Turn raw data into clear decisions. Built for teams who want
-            answers, not more dashboards.
-        </p>
+        <p class="sv-lead">Turn raw data into clear decisions. Built for teams who want answers, not more dashboards.</p>
         <div class="sv-hero-actions">
             <button class="sv-btn-primary sv-btn-lg">Start free trial</button>
             <button class="sv-btn-ghost sv-btn-lg">See how it works →</button>
@@ -144,9 +137,7 @@
         <div class="sv-wrap">
             <div class="sv-section-header">
                 <h2 class="sv-h2">Everything you need to move fast</h2>
-                <p class="sv-section-sub">
-                    Simple, powerful, and designed to get out of your way.
-                </p>
+                <p class="sv-section-sub">Simple, powerful, and designed to get out of your way.</p>
             </div>
             <div class="sv-cards">
                 {#each features as f}
@@ -198,12 +189,8 @@
     <!-- CTA BANNER -->
     <section class="sv-cta-banner">
         <h2 class="sv-cta-h2">Ready to see the difference?</h2>
-        <p class="sv-cta-p">
-            Join thousands of teams already using Lumina.
-        </p>
-        <button class="sv-btn-inverse"
-            >Start for free — no credit card needed</button
-        >
+        <p class="sv-cta-p">Join thousands of teams already using Lumina.</p>
+        <button class="sv-btn-inverse">Start for free — no credit card needed</button>
     </section>
 
     <!-- FOOTER -->
@@ -247,11 +234,7 @@
 
         /* Derived border tones from --secondary */
         --sv-border: color-mix(in srgb, var(--sv-secondary) 45%, transparent);
-        --sv-border-subtle: color-mix(
-            in srgb,
-            var(--sv-secondary) 20%,
-            transparent
-        );
+        --sv-border-subtle: color-mix(in srgb, var(--sv-secondary) 20%, transparent);
 
         background: var(--sv-bg);
         color: var(--sv-text);
@@ -439,8 +422,7 @@
         border-radius: 999px;
         font-size: 0.78rem;
         font-weight: 600;
-        border: var(--sv-border-width) solid
-            color-mix(in srgb, var(--sv-accent) 35%, transparent);
+        border: var(--sv-border-width) solid color-mix(in srgb, var(--sv-accent) 35%, transparent);
     }
 
     .sv-lead {
@@ -546,8 +528,7 @@
         padding: 1.5rem 1rem;
         border-radius: var(--sv-radius);
         background: color-mix(in srgb, var(--sv-primary) 7%, transparent);
-        border: var(--sv-border-width) solid
-            color-mix(in srgb, var(--sv-primary) 18%, transparent);
+        border: var(--sv-border-width) solid color-mix(in srgb, var(--sv-primary) 18%, transparent);
     }
 
     .sv-stat-num {
@@ -620,11 +601,7 @@
     /* CTA tile: tinted --primary, acts as a soft navigational prompt */
     .sv-post-cta {
         background: color-mix(in srgb, var(--sv-primary) 8%, transparent);
-        border-color: color-mix(
-            in srgb,
-            var(--sv-primary) 20%,
-            transparent
-        ) !important;
+        border-color: color-mix(in srgb, var(--sv-primary) 20%, transparent) !important;
         align-items: center;
         justify-content: center;
         gap: 0.75rem;

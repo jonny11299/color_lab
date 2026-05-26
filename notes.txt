@@ -9,6 +9,18 @@ And webknobs
 
 
 
+5/25/26:
+- Nearly there, just need to:
+    1. Wire in "generated css"
+    2. Add some sorting, more options to the palette (like that native os color picker)
+    3. Make everything look way better and feel way better
+
+
+5/24/26:
+Your shit is in "claude_and_jonny_food"
+Also in "components-ide/NotesToSelf.svelte"
+
+
 
 
 

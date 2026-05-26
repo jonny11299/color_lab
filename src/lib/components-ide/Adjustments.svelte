@@ -17,17 +17,18 @@ x-axis: saturate / desaturate
     import { colorStore } from "$lib/stores/colorStore.svelte.js";
 
     // sets which function is used to modulate the colors across the square:
-    let colorModOptions = ["h x l", "h x l (alt)", "s x l", "s x h"];
+    let colorModOptions = ["h x l", "h x l (alt)", "s x l", "h x s"];
     let { selectedColorMod } = $props(); // pass this in via index, referencing the above array
 
     // should be odd numbers so our color can sit in the center
-    let numRows = 39;
-    let numCols = 39; // be sure to adjust .grid 'grid-template-columns' in response to this
+    let numRows = 29;
+    let numCols = 99; // be sure to adjust .grid 'grid-template-columns' in response to this
 
-    let lumStep = 2;
-    let darkStep = 0.1;
-    let hueStep = 2;
-    let satStep = 0.03;
+    let lumStep = 0.5;
+    let darkStep = 0.3;
+    let hueStep = 0.5;
+    let satStep = 0.02;
+    let satStepVertical = satStep * 2.5;
 
     let centerColor = $derived(colorStore.cur?.color);
     // $effect(() => console.log("we now have " + centerColor));
@@ -142,7 +143,7 @@ x-axis: saturate / desaturate
             c = c.set("lab.l", c.get("lab.l") - ymod * lumStep);
 
             // affect x-axis (saturation)
-            c = c.set("hsl.s", `*${1 + xmod * satStep}`);
+            c = c.set("hsl.s", `*${Math.max(1 + xmod * satStep, 0)}`);
 
             // if (c.clipped) console.log(`clipping ${c} at ${xmod}, ${ymod}`);
 
@@ -167,7 +168,7 @@ x-axis: saturate / desaturate
             c = c.set("hsl.h", newHue);
 
             // affect y-axis (saturation)
-            c = c.set("hsl.s", `*${1 - ymod * satStep}`);
+            c = c.set("hsl.s", `*${Math.max(1 - ymod * satStepVertical, 0)}`);
 
             // if (c.clipped) console.log(`clipping ${c} at ${xmod}, ${ymod}`);
 
@@ -200,6 +201,18 @@ x-axis: saturate / desaturate
 </div>
 
 <style>
+    .container {
+        border: 1px solid var(--border);
+        border-radius: 0;
+        padding: 1rem;
+        margin: 0;
+        min-width: 15rem;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow: hidden;
+    }
     .title {
         padding: 0rem;
         margin: 0rem;
@@ -210,20 +223,6 @@ x-axis: saturate / desaturate
         padding: 0rem;
         margin: 0rem;
         margin-bottom: 1rem;
-    }
-
-    .container {
-        border: 1px solid var(--border);
-        border-radius: 0;
-        padding: 1rem;
-        margin: 0;
-        max-width: 20rem;
-        min-width: 15rem;
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        overflow: hidden;
     }
 
     .grid {
@@ -238,7 +237,7 @@ x-axis: saturate / desaturate
     }
 
     .square {
-        width: 0.35rem;
+        width: 0.2rem;
         aspect-ratio: 1;
         border: none;
     }

@@ -4,6 +4,7 @@
     import About from "./About.svelte";
     import Adjustments from "./Adjustments.svelte";
     import NotesToSelf from "./NotesToSelf.svelte";
+    import Edits from "./Edits.svelte";
 
     let renderRaw = $state(false);
 
@@ -21,6 +22,7 @@
 </script>
 
 <div class="columns">
+    <Edits />
     <ColorSelections />
     <div class="adjustmentsColumn">
         <Adjustments selectedColorMod={2} />
@@ -36,9 +38,9 @@
 <style>
     .columns {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr; /* four equal columns */
+        grid-template-columns: 1fr 2fr 2fr; /* two equal columns */
         align-items: start; /* center items on the top of their column */
-        justify-items: start; /* left-justify within each cell */
+        justify-items: center; /* left-justify within each cell */
         gap: 0;
 
         overflow: scroll;

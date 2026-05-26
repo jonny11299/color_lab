@@ -15,8 +15,9 @@
     <p>For example... https://colorbrewer2.org/#type=sequential&scheme=PuRd&n=3</p>
     <p>
         Palette currently sorts by lightness. Could do "sort by frequency in image, sort by lightness, sort by chroma, sort by hue". Or sort by
-        contrast from the darkest element?
+        contrast from the darkest element? ... or "group by / sort by" logic?
     </p>
+    <p>Fuck man. Shortest path is: - Make it split-pane - add "export" button that's it. The rest is candy.</p>
 </div>
 
 <style>

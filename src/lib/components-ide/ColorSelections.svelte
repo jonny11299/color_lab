@@ -80,7 +80,7 @@
 
 <div class="container">
     <div class="title">
-        <h3 class="title">Selections & Contrast:</h3>
+        <h3 class="title">Contrast:</h3>
     </div>
     <div class="grid">
         <div class="name"><h4>name:</h4></div>
@@ -121,7 +121,7 @@
         border: 1px solid var(--border);
         border-radius: 0;
         padding: 1rem;
-        max-width: 20rem;
+        width: auto;
         min-width: 18rem;
 
         display: flex;
@@ -132,7 +132,7 @@
     .grid {
         display: grid;
         border: none;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: repeat(4, 1fr);
         column-gap: 1.5rem;
         row-gap: 0.5rem;
 
@@ -168,6 +168,11 @@
     }
     .contrast {
         min-width: 0;
+    }
+
+    .hex {
+        color: var(--text-muted);
+        font-size: smaller;
     }
 
     .contrastSpanMuted {
