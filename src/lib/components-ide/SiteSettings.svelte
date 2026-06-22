@@ -4,7 +4,7 @@
     import About from "./About.svelte";
     import Adjustments from "./Adjustments.svelte";
     import NotesToSelf from "./NotesToSelf.svelte";
-    import Edits from "./Edits.svelte";
+    import ScaleSelections from "./ScaleSelections.svelte";
 
     let renderRaw = $state(false);
 
@@ -22,7 +22,6 @@
 </script>
 
 <div class="columns">
-    <Edits />
     <ColorSelections />
     <div class="adjustmentsColumn">
         <Adjustments selectedColorMod={2} />
@@ -30,6 +29,8 @@
         <!-- <Adjustments selectedColorMod={1} /> -->
         <Adjustments selectedColorMod={3} />
     </div>
+
+    <ScaleSelections />
 
     <About />
     <NotesToSelf />

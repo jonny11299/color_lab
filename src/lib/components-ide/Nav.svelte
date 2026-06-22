@@ -1,17 +1,38 @@
 <script>
     import { themeStore } from "$lib/stores/theme.svelte.js";
+
+    import { colorStore } from "$lib/stores/colorStore.svelte.js";
+    import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
+
+    // stands for 'export', which is a reserved keyword in js.
+    function exp() {
+        phaseStore.setExportState(true);
+    }
 </script>
 
 <nav>
-    <span class="title"><h3>Color Lab</h3></span>
+    <!--
+    <div class="title"><h3>Color Lab</h3></div>
+    -->
 
-    <div class="theme-buttons">
-        <button onclick={() => themeStore.setTheme("light")}>Light</button>
-        <button onclick={() => themeStore.setTheme("dark")}>Dark</button>
-        <!--<button onclick={() => themeStore.setTheme("system")}>System</button>-->
+    <div class="menu">
+        <div class="menuTitle">Menu:</div>
+        <div class="menuOptions">
+            <button onclick={() => colorStore.undo()}>Undo</button>
+            <button onclick={() => colorStore.redo()}>Redo</button>
+            <button onclick={() => exp()}>Export</button>
+        </div>
     </div>
 
-    <p>Current: {themeStore.theme}</p>
+    <div class="theme">
+        <div class="themeTitle">Theme:</div>
+        <div class="theme-buttons">
+            <button onclick={() => themeStore.setTheme("light")} class:selectedTheme={themeStore.theme === "light"}>Light</button>
+            <button onclick={() => themeStore.setTheme("dark")} class:selectedTheme={themeStore.theme === "dark"}>Dark</button>
+            <button onclick={() => themeStore.setTheme("grey")} class:selectedTheme={themeStore.theme === "grey"}>Grey</button>
+            <!--<button onclick={() => themeStore.setTheme("system")}>System</button>-->
+        </div>
+    </div>
 </nav>
 
 <style>
@@ -19,12 +40,12 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 0rem 2rem;
-        background: var(--bg);
-        border-bottom: 0px solid var(--border);
+        padding: 0rem 1rem;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
         border-radius: 0px;
 
-        max-height: 4rem;
+        max-height: 3rem;
     }
 
     .title {
@@ -38,9 +59,33 @@
         gap: 0.5rem;
     }
 
+    .theme {
+        display: flex;
+        flex-direction: row;
+
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .menu {
+        display: flex;
+        flex-direction: row;
+
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .menuTitle {
+    }
+
+    .menuOptions {
+    }
+
+    .selectedTheme {
+        text-decoration: underline;
+    }
+
     button {
-        padding: 0.25rem 0.75rem;
-        border: 2px solid var(--border);
+        border: 0px solid var(--border);
         border-radius: 4px;
         background: transparent;
         color: var(--text);
@@ -48,6 +93,10 @@
     }
 
     button:hover {
+        border-color: color-mix(in srgb, var(--primary-hover) 50%, var(--text-muted));
+        color: color-mix(in srgb, var(--primary-hover) 50%, var(--text-muted));
+    }
+    button:active {
         border-color: var(--primary-hover);
         color: var(--primary-hover);
     }

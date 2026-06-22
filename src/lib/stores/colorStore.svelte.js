@@ -78,6 +78,17 @@ function createColorStore() {
         get cur() { return cur },
         get hoveredPreview() { return hoveredPreview },
 
+        get colorSettings() {
+            return {
+                background: tailored[0].color,
+                surface: tailored[1].color,
+                text: tailored[2].color,
+                primary: tailored[3].color,
+                secondary: tailored[4].color,
+                accent: tailored[5].color,
+            };
+        },
+
 
         setColor: (i, c) => {
             undoQueue.push(tailored.map(t => ({ ...t }))); // pushing deep copy

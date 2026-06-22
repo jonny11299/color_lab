@@ -9,6 +9,26 @@ And webknobs
 
 
 
+6/22/26
+- weird bug where I click on theme and it changes the eyes right when I open 
+- Numbers should be little dots 
+- Would be cool to have a simplified version, just a grid with important values, color pickers.
+
+
+- Each of them is minimized at first
+- As I change something, a new one opens up. 
+- Only have one open at a time. 
+
+
+
+
+5/27/26:
+- need to make the paramStore sliders the right color 
+- Why is my border in the export just a transparent version of 'secondary'?
+- add "Current" color theme, so you can watch the site itself change with you
+
+
+
 5/25/26:
 - Nearly there, just need to:
     1. Wire in "generated css"
@@ -25,7 +45,7 @@ Also in "components-ide/NotesToSelf.svelte"
 
 
 using after high on 5/15:
-- love it, love the colors, feeling good & official
+- love it, love the colors, feeling good & officiala
 - should be able to select pixel from image directly via hovering over 
 	(do I want to overlay some 'average' bitmap of the pixels? Or just 
 		raw pixels? Probably raw pixels, right? The palette gives 

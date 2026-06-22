@@ -15,10 +15,17 @@
 
 function createPhaseStore() {
     let phase = $state(0);
+    let exporting = $state(false);
 
 
     return {
         get phase() { return phase },
+        get exporting() { return exporting },
+
+
+        setExportState: (bool) => {
+            exporting = bool;
+        },
 
 
         // 'i' is the max state we can advance to.

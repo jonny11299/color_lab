@@ -3,41 +3,54 @@
 function createParamStore() {
     let params = $state([
         {
-            name: "muteStrength",
+            name: "Mute Strength",
+            key: "muteStrength",
             min: 0,
             max: 1.5,
-            step: 0.1,
+            step: 0.01,
             cur: 0.5,
             fixed: 1, // num digits to display for toFixed
         },
         {
-            name: "typeScale",
+            name: "Type Scale",
+            key: "typeScale",
             min: 1,
             max: 1.8,
-            step: 0.02,
+            step: 0.01,
             cur: 1.2,
             fixed: 2,
         },
         {
-            name: "borderWidth",
+            name: "Border Width",
+            key: "borderWidth",
             min: 0,
             max: 12,
-            step: 1,
+            step: 0.5,
             cur: 3,
-            fixed: 0,
+            fixed: 1,
+            unit: "px"
         },
         {
-            name: "borderRadius",
+            name: "Border Radius",
+            key: "borderRadius",
             min: 0,
             max: 50,
-            step: 1,
+            step: 0.5,
             cur: 10,
-            fixed: 0,
+            fixed: 1,
+            unit: "px"
         },
     ]);
 
     return {
         get params() { return params },
+        get paramSettings() {
+            const s = [];
+            params.forEach((p) => {
+                s[p.key] = p.cur.toFixed(p.fixed)
+            });
+            return s;
+        },
 
 
         setByIndex: (i, val) => {

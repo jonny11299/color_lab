@@ -8,6 +8,9 @@
     import Palette from "./Palette.svelte";
     import SiteSettings from "./SiteSettings.svelte";
     import CssEditor from "./CssEditor.svelte";
+    import FileBar from "./FileBar.svelte";
+    import Dots from "./Dots.svelte";
+    import ColorsSummary from "./ColorsSummary.svelte";
 
     import eyeOpen from "$lib/icons/eye-open.svg?raw";
     import eyeClose from "$lib/icons/eye-close.svg?raw";
@@ -139,6 +142,16 @@
 <div class="shell" bind:this={shellEl}>
     <!-- ── Left column ──────────────────────────────────────────────── -->
     <div class="col" style="width: {leftWidth}%;">
+        <!--
+        <div class="topToolbarSticky">
+            <FileBar />
+        </div>
+        -->
+
+        <div class="topToolbarSticky">
+            <ColorsSummary />
+        </div>
+
         <div class="pane-bottom" class:pane-focused={focus === 0}>
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -194,9 +207,14 @@
             </div>
         </div>
 
-        <div class="pane-bottom" class:pane-focused={focus === 4}>
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
+        <!--
+        <div class="bottomToolbarSticky">
+            <ColorsSummary />
+        </div>
+        -->
+
+        <!--
+        <div class="pane-bottom" class:pane-focused={focus === 4}> 
             <div class="pane-header" onclick={() => (paneVisible[4] = !paneVisible[4])}>
                 Generated CSS
 
@@ -213,6 +231,7 @@
                 {/if}
             </div>
         </div>
+        -->
     </div>
     <!-- ── Horizontal divider — single element, full shell height ───── -->
     <!--
@@ -236,6 +255,7 @@
             <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div class="pane-header" onclick={() => (paneVisible[2] = !paneVisible[2])}>
                 Site Preview
+                <Dots />
                 <button class="eye-btn">
                     {@html paneVisible[2] ? eyeOpen : eyeClose}
                 </button>
@@ -298,6 +318,8 @@
         background: var(--bg);
         color: var(--text);
         user-select: none; /* prevents text selection during drag */
+
+        overflow-x: hidden;
     }
 
     /* ── Columns ─────────────────────────────────────────────────────────────
@@ -309,6 +331,12 @@
         flex-direction: column;
         flex-shrink: 0;
         overflow: visible;
+
+        min-width: 0; /* prevents flex children from blowing out width */
+        box-sizing: border-box; /* padding is included in the width, not added on top */
+
+        padding: 1rem;
+        gap: 1rem;
     }
 
     /* ── Panes ───────────────────────────────────────────────────────────── */
@@ -327,8 +355,40 @@
         align-self: flex-start;
     }
     .pane-focused {
-        outline: 1px solid var(--primary-hover);
+        outline: 0px solid var(--primary-hover);
         outline-offset: -2px;
+    }
+
+    .topToolbarSticky {
+        /* padding: 0.375rem 0.75rem;*/
+        font-size: 0.6875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        /* background: var(--surface); */
+        color: var(--text);
+        flex-shrink: 0;
+        width: 100%;
+
+        position: sticky;
+        top: 0;
+        align-self: flex-start;
+    }
+
+    .bottomToolbarSticky {
+        /* padding: 0.375rem 0.75rem;*/
+        font-size: 0.6875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        background: var(--surface);
+        color: var(--text);
+        flex-shrink: 0;
+        width: 100%;
+
+        position: sticky;
+        bottom: 0;
+        align-self: flex-end;
     }
 
     .pane-bottom {
@@ -339,6 +399,10 @@
         background: var(--bg);
         overflow: visible;
         /* margin-bottom: 5rem; */
+
+        border: 0px solid var(--border);
+        border-radius: var(--bradius);
+        background: var(--surface);
     }
 
     .pane-header {
@@ -354,6 +418,9 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+
+        border: 0px solid var(--border);
+        border-radius: var(--bradius);
 
         outline: 1px solid var(--surface);
         outline-offset: -2px;

@@ -1,29 +1,32 @@
-<!-- Depreciated: moved to 'FileBar.svelte' -->
-
 <script>
     import { colorStore } from "$lib/stores/colorStore.svelte.js";
+    import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
+
+    // stands for 'export', which is a reserved keyword in js.
+    function exp() {
+        phaseStore.setExportState(true);
+    }
 </script>
 
 <div class="container">
-    <h3 class="title">Edits</h3>
     <!-- Populate the grid with color adjustments -->
     <button onclick={() => colorStore.undo()}>Undo</button>
     <button onclick={() => colorStore.redo()}>Redo</button>
+    <button onclick={() => exp()}>Export</button>
 </div>
 
 <style>
     .container {
-        border: 1px solid var(--border);
+        border: none;
         border-radius: 0;
-        padding: 1rem;
         margin: 0;
         min-width: 5rem;
-        max-width: 10rem;
+        width: 100%;
 
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
-        overflow: hidden;
+        overflow: scroll;
     }
     .title {
         padding: 0rem;
@@ -32,13 +35,11 @@
     }
 
     button {
-        padding: 0.25rem 0.75rem;
-        border: 2px solid var(--border);
+        border: 0px solid var(--border);
         border-radius: 4px;
         background: transparent;
         color: var(--text);
         cursor: pointer;
-        margin: 0.25rem;
     }
 
     button:hover {
@@ -48,19 +49,5 @@
     button:active {
         border-color: var(--primary-hover);
         color: var(--primary-hover);
-    }
-
-    .subtitle {
-        padding: 0rem;
-        margin: 0rem;
-        margin-bottom: 1rem;
-    }
-
-    .square {
-        width: 0.2rem;
-        aspect-ratio: 1;
-        border: none;
-    }
-    .square:hover {
     }
 </style>
