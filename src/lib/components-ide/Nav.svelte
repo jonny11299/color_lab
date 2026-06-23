@@ -45,6 +45,11 @@
         border-bottom: 1px solid var(--border);
         border-radius: 0px;
 
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+
         max-height: 3rem;
     }
 
@@ -57,6 +62,11 @@
     .theme-buttons {
         display: flex;
         gap: 0.5rem;
+
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
     }
 
     .theme {
@@ -78,6 +88,10 @@
     }
 
     .menuOptions {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
     }
 
     .selectedTheme {
@@ -86,18 +100,29 @@
 
     button {
         border: 0px solid var(--border);
-        border-radius: 4px;
         background: transparent;
         color: var(--text);
         cursor: pointer;
+
+        font-size: 0.75rem;
+        font-weight: 400;
+        letter-spacing: 0.08em;
+
+        padding-bottom: 6px;
     }
 
     button:hover {
+        /*
         border-color: color-mix(in srgb, var(--primary-hover) 50%, var(--text-muted));
         color: color-mix(in srgb, var(--primary-hover) 50%, var(--text-muted));
+        */
+        text-decoration: underline;
     }
     button:active {
+        /*
         border-color: var(--primary-hover);
         color: var(--primary-hover);
+        */
+        text-decoration: underline;
     }
 </style>

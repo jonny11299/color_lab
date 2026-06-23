@@ -318,8 +318,6 @@
         background: var(--bg);
         color: var(--text);
         user-select: none; /* prevents text selection during drag */
-
-        overflow-x: hidden;
     }
 
     /* ── Columns ─────────────────────────────────────────────────────────────
@@ -406,7 +404,7 @@
     }
 
     .pane-header {
-        padding: 0.375rem 0.75rem;
+        padding: 0.375rem 1rem;
         font-size: 0.6875rem;
         font-weight: 600;
         text-transform: uppercase;

@@ -14,6 +14,7 @@
     // calculates the contrast between the two colors
     // first color is given by index, second by name.
     // returns the class name (.cl) and numerical value, formatted as a string (.value) of the contrast
+    // if you change this, also be sure to modify the function in "ColorsSummary.svelte"
     function calculateContrast(colorIndex1, colorName) {
         try {
             let c1 = tailored[colorIndex1]?.color ?? null;
