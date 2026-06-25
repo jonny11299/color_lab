@@ -22,7 +22,7 @@ function createThemeStore() {
 
     function init() {
         const saved = localStorage.getItem('theme');
-        setTheme(saved ?? 'system');
+        setTheme(saved ?? 'grey');
     }
 
     return {

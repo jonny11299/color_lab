@@ -9,6 +9,7 @@
         const ts = tailored;
 
         let failed = false;
+        let largeTextOnly = false;
 
         ts.forEach((item, i) => {
             if (calculateContrast(i, "bg").cl === "contrastSpanBad") {
@@ -17,12 +18,22 @@
             if (calculateContrast(i, "surface").cl === "contrastSpanBad") {
                 failed = true;
             }
+            if (calculateContrast(i, "bg").cl === "contrastSpanDecent") {
+                largeTextOnly = true;
+            }
+            if (calculateContrast(i, "surface").cl === "contrastSpanDecent") {
+                largeTextOnly = true;
+            }
         });
 
         if (failed) {
             return "contrast: failed";
         } else {
-            return "contrast: passed";
+            if (largeTextOnly) {
+                return "contrast: large text only";
+            } else {
+                return "contrast: passed";
+            }
         }
     });
 
@@ -83,7 +94,7 @@
 
             const contrast = chroma.contrast(c1, c2).toFixed(1);
 
-            const cl = contrast > 4.5 ? "contrastSpanGood" : "contrastSpanBad";
+            const cl = contrast > 4.5 ? "contrastSpanGood" : contrast > 3 ? "contrastSpanDecent" : "contrastSpanBad";
 
             return {
                 cl,
@@ -111,21 +122,28 @@
 
     <div class="item">
         <div class="swatches">
-            <div class="colorAndNameHeader">
-                <!-- This renders the currently-selected color here, but it's a bit confusing
+            <div class="swatchColumnHeader">
                 {#each tailored as t, j}
                     {#if tailoredIndex === j}
-                        <div
-                            class="swatch"
-                            style="background: {getRenderColor(t, j)}; 
+                        <div class="contrastSwatchContainer">
+                            <div class="contrastSwatchLeftSide">
+                                <div
+                                    class="contrastSwatch"
+                                    style="background: {getRenderColor(t, j)}; 
                 border-color: {tailoredIndex === j ? `var(--text)` : `var(--bg)`};
-                 border-width: {tailoredIndex === j ? `0px` : `0`}"
-                            onclick={() => selectIndex(j)}
-                        ></div>
+                 border-width: {tailoredIndex === j ? `1px` : `1`}"
+                                ></div>
+                            </div>
+                            <div class="contrastSwatchRightSide">
+                                <div class="bgswatchrender" style="background: {colorStore.tailored[0]?.color}"></div>
+                                <div class="bgswatchrender" style="background: {colorStore.tailored[1]?.color}"></div>
+                            </div>
+                        </div>
                     {/if}
                 {/each}
-            -->
+                <!--
                 <div class="dummySwatch"></div>
+                -->
                 <div class="header">Contrast:</div>
 
                 <div class="contrastSpanHolder">bg:</div>
@@ -152,17 +170,19 @@
     <div class="item">
         <div class="swatches">
             {#each tailored as t, j}
-                <div class="colorAndName">
-                    <div
-                        class="swatch"
-                        style="background: {getRenderColor(t, j)}; 
+                <div class="swatchColumn">
+                    <div class="swatchAndName">
+                        <div
+                            class="swatch"
+                            style="background: {getRenderColor(t, j)}; 
                 border-color: {tailoredIndex === j ? `var(--text)` : `var(--bg)`};
                  border-width: {tailoredIndex === j ? `0px` : `0`}"
-                        onclick={() => selectIndex(j)}
-                    ></div>
+                            onclick={() => selectIndex(j)}
+                        ></div>
 
-                    <div class="swatchName" class:nameSelected={tailoredIndex === j} onclick={() => selectIndex(j)}>
-                        {t.name}
+                        <div class="swatchName" class:nameSelected={tailoredIndex === j} onclick={() => selectIndex(j)}>
+                            {t.name}
+                        </div>
                     </div>
 
                     <!-- Formatting contrast ratios 
@@ -182,7 +202,7 @@
             {/each}
         </div>
     </div>
-    <div class="title" class:contrastFailed={contrastMessage.includes("failed")}>{contrastMessage}</div>
+    <div class="title" class:contrastFailed={contrastMessage.includes("failed")} style="margin-left: 1rem;">{contrastMessage}</div>
 </div>
 
 <style>
@@ -203,7 +223,7 @@
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
 
-        overflow-x: hidden;
+        overflow-x: scroll;
     }
 
     .item {
@@ -214,21 +234,28 @@
         color: red;
     }
 
-    .colorAndName {
+    .swatchColumn {
         display: flex;
         flex-direction: column;
 
         align-items: center;
     }
-    .colorAndName:hover {
-        text-decoration: underline;
-    }
 
-    .colorAndNameHeader {
+    .swatchColumnHeader {
         display: flex;
         flex-direction: column;
 
         align-items: flex-end;
+    }
+
+    .swatchAndName {
+        display: flex;
+        flex-direction: column;
+
+        align-items: center;
+    }
+    .swatchAndName:hover .swatchName {
+        text-decoration: underline;
     }
 
     .swatchName {
@@ -266,6 +293,53 @@
     }
     .swatch:hover {
         cursor: pointer;
+    }
+
+    /* these spacial dimensions should match .swatch's */
+    .contrastSwatchContainer {
+        display: grid;
+        grid-template-columns: repeat(1, 2fr 1fr);
+        align-items: center;
+        justify-content: center;
+        border: none;
+        color: var(--text);
+
+        width: 4rem;
+        height: 2rem;
+        margin: 0.2rem;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .contrastSwatch {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        color: var(--text);
+        border-radius: 0px;
+
+        width: 100%;
+        height: 100%;
+    }
+
+    .contrastSwatchLeftSide {
+        width: 100%;
+        height: 100%;
+    }
+    .contrastSwatchRightSide {
+        width: 100%;
+        height: 100%;
+    }
+    .bgswatchrender {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        color: var(--text);
+        border-radius: 0px;
+
+        width: 100%;
+        height: 50%;
     }
 
     .header {
@@ -309,5 +383,9 @@
     .contrastSpanBad {
         text-decoration: line-through;
         color: red;
+    }
+    .contrastSpanDecent {
+        text-decoration: underline;
+        color: var(--text-warn);
     }
 </style>

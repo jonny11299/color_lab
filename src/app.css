@@ -5,6 +5,7 @@
     --divider: #d9d9d9;
     --text: #111111;
     --text-muted: #525252;
+    --text-warn: #730000;
     --primary: #000000;
     --primary-hover: #518cc2;
     --border: #000000;
@@ -30,6 +31,7 @@
     --divider: #333334;
     --text: #f0f0f0;
     --text-muted: #cecece;
+    --text-warn: #fd9999;
     --primary: #ffffff;
     --primary-hover: #61b554;
     /* --primary-hover: #32822b; lower contrast alternative */
@@ -43,6 +45,7 @@
     --divider: #8a8a8a;
     --text: #161616;
     --text-muted: #3a3a3a;
+    --text-warn: #5c0000;
     --primary: #1f1f1f;
     --primary-hover: #404040;
     /* was a blue/green accent — replaced with a lightness shift */

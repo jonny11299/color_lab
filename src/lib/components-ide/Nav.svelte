@@ -27,9 +27,9 @@
     <div class="theme">
         <div class="themeTitle">Theme:</div>
         <div class="theme-buttons">
+            <button onclick={() => themeStore.setTheme("grey")} class:selectedTheme={themeStore.theme === "grey"}>Grey</button>
             <button onclick={() => themeStore.setTheme("light")} class:selectedTheme={themeStore.theme === "light"}>Light</button>
             <button onclick={() => themeStore.setTheme("dark")} class:selectedTheme={themeStore.theme === "dark"}>Dark</button>
-            <button onclick={() => themeStore.setTheme("grey")} class:selectedTheme={themeStore.theme === "grey"}>Grey</button>
             <!--<button onclick={() => themeStore.setTheme("system")}>System</button>-->
         </div>
     </div>
