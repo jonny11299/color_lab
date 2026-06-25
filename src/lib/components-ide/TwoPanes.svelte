@@ -483,6 +483,12 @@
         stroke-width: 2;
     }
 
+    .eye-btn :global(svg) {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
     .eye-btn:hover,
     .pane-header:hover .eye-btn {
         color: var(--primary-hover);

@@ -9,6 +9,16 @@ And webknobs
 
 
 
+
+
+Latest (6/22/26)
+- Claude is being stinky, so I just have to:
+    - Make the title for "colors, contrast - bg, contrast - surface" actually line up with the colors presented.
+    - Make the 'image uploader' decent
+    - make shit minimized / invisible except when used.
+
+
+
 6/22/26
 - weird bug where I click on theme and it changes the eyes right when I open 
 - Numbers should be little dots 

@@ -100,10 +100,53 @@
 </script>
 
 <div class="container">
-    <div class="titles">
+    <!--
+    <div class="header">
+        <div class="dummySwatch"></div>
         <div class="title">Colors:</div>
         <div class="title">Contrast - bg:</div>
         <div class="title">Contrast - surface:</div>
+    </div>
+    -->
+
+    <div class="item">
+        <div class="swatches">
+            <div class="colorAndNameHeader">
+                <!-- This renders the currently-selected color here, but it's a bit confusing
+                {#each tailored as t, j}
+                    {#if tailoredIndex === j}
+                        <div
+                            class="swatch"
+                            style="background: {getRenderColor(t, j)}; 
+                border-color: {tailoredIndex === j ? `var(--text)` : `var(--bg)`};
+                 border-width: {tailoredIndex === j ? `0px` : `0`}"
+                            onclick={() => selectIndex(j)}
+                        ></div>
+                    {/if}
+                {/each}
+            -->
+                <div class="dummySwatch"></div>
+                <div class="header">Contrast:</div>
+
+                <div class="contrastSpanHolder">bg:</div>
+                <div class="contrastSpanHolder">surface:</div>
+
+                <!--
+                <div class="contrastSpanHolder">
+                    <div class="twoColSplit">
+                        <div class="contrastText">Contrast:</div>
+                        <div class="contrastText">bg:</div>
+                    </div>
+                </div>
+                <div class="contrastSpanHolder">
+                    <div class="twoColSplit">
+                        <div class="contrastText">Contrast:</div>
+                        <div class="contrastText">surface:</div>
+                    </div>
+                </div>
+                -->
+            </div>
+        </div>
     </div>
 
     <div class="item">
@@ -180,6 +223,14 @@
     .colorAndName:hover {
         text-decoration: underline;
     }
+
+    .colorAndNameHeader {
+        display: flex;
+        flex-direction: column;
+
+        align-items: flex-end;
+    }
+
     .swatchName {
         display: flex;
         justify-self: center;
@@ -215,6 +266,35 @@
     }
     .swatch:hover {
         cursor: pointer;
+    }
+
+    .header {
+        display: flex;
+        justify-self: center;
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+
+        text-decoration: underline;
+    }
+    .dummySwatch {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0px dotted var(--border);
+        color: var(--text);
+
+        width: 4rem;
+        height: 2rem;
+        margin: 0.2rem;
+        border-radius: 4px;
+    }
+    .twoColSplit {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        justify-content: space-between;
+        align-items: center;
+        justify-items: end;
+        text-align: right;
     }
 
     .contrastSpanHolder {
