@@ -11,8 +11,8 @@
 
 {#if phase === 0}
     <div>
-        <h3>Waiting for Image upload</h3>
-        <p>Please upload an image to get started.</p>
+        <h3>Waiting for color selection</h3>
+        <p>Select a color to view site preview.</p>
     </div>
 {:else if phase === 1}
     <div>

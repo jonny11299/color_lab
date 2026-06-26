@@ -11,6 +11,7 @@
     import FileBar from "./FileBar.svelte";
     import Dots from "./Dots.svelte";
     import ColorsSummary from "./ColorsSummary.svelte";
+    import ColorSelector from "./ColorSelector.svelte";
 
     import eyeOpen from "$lib/icons/eye-open.svg?raw";
     import eyeClose from "$lib/icons/eye-close.svg?raw";
@@ -152,9 +153,10 @@
             <ColorsSummary />
         </div>
 
+        <!-- Old Image Uploader 
         <div class="pane-bottom" class:pane-focused={focus === 0}>
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <!-- svelte-ignore a11y_click_events_have_key_events 
+            <!-- svelte-ignore a11y_no_static_element_interactions 
             <div class="pane-header" onclick={() => (paneVisible[0] = !paneVisible[0])}>
                 Image Uploader
                 <button class="eye-btn">
@@ -164,6 +166,22 @@
 
             <div class="pane-body" class:hidden={!paneVisible[0]}>
                 <ImageLoader />
+            </div>
+        </div>
+        -->
+
+        <div class="pane-bottom" class:pane-focused={focus === 0}>
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <div class="pane-header" onclick={() => (paneVisible[0] = !paneVisible[0])}>
+                Color Selector
+                <button class="eye-btn">
+                    {@html paneVisible[0] ? eyeOpen : eyeClose}
+                </button>
+            </div>
+
+            <div class="pane-body" class:hidden={!paneVisible[0]}>
+                <ColorSelector />
             </div>
         </div>
 
