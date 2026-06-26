@@ -127,7 +127,9 @@
                     />
                 </div>
             </div>
-            <div class="otherSpace"></div>
+            <div class="otherSpace">
+                <p>Palettes will go here...</p>
+            </div>
         </div>
     {/if}
 
@@ -173,6 +175,8 @@
         flex-direction: column;
         border: 2px solid var(--text);
         border-radius: 4px;
+
+        overflow: hidden;
     }
 
     .icons {
@@ -202,6 +206,9 @@
         border-radius: 4px;
         flex: 1;
         align-self: stretch;
+
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
     .dropzone {

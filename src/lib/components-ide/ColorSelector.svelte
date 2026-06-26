@@ -1,5 +1,6 @@
 <script>
     import ImageLoaderSmall from "./ImageLoaderSmall.svelte";
+    import Picker from "./Picker.svelte";
     let fromImage = $state(true);
 </script>
 
@@ -15,7 +16,9 @@
     <div class:hidden={!fromImage}>
         <ImageLoaderSmall />
     </div>
-    <div class:hidden={fromImage}></div>
+    <div class:hidden={fromImage}>
+        <Picker />
+    </div>
 </div>
 
 <style>
