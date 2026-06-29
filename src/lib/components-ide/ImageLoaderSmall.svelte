@@ -147,6 +147,8 @@
         max-width: 100%;
         min-width: 15rem;
 
+        margin-top: 1rem;
+
         display: flex;
         flex-direction: column;
         align-items: center;

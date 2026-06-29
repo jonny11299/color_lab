@@ -29,13 +29,12 @@
     --bg: #0f0f10;
     --surface: #1c1c1e;
     --divider: #333334;
-    --text: #f0f0f0;
-    --text-muted: #cecece;
+    --text: #e2e2e2;
+    --text-muted: #ababab;
     --text-warn: #fd9999;
-    --primary: #ffffff;
+    --primary: #b6b6b6;
     --primary-hover: #61b554;
-    /* --primary-hover: #32822b; lower contrast alternative */
-    --border: #ffffff;
+    --border: #505052;
 }
 
 /* --- Greyscale theme (neutral chrome; user's palette is the only chroma) --- */

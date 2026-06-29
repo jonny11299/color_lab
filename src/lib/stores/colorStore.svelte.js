@@ -107,6 +107,11 @@ function createColorStore() {
             tailored[curTailoredIndex].color = c;
         },
 
+        setCurrentColorIgnoreQueue: (c) => {
+            selections[curTailoredIndex].color = c;
+            tailored[curTailoredIndex].color = c;
+        },
+
         // iterates both selected and tailored colors
         iterate: () => {
             curIndex = (curIndex + 1) % selections.length;
