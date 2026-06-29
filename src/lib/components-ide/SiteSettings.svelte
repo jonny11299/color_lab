@@ -22,11 +22,12 @@
 </script>
 
 <div class="columns">
+    <!-- muted because of reactivity delays in Picker
     <ColorSelections />
     <div class="adjustmentsColumn">
         <Adjustments selectedColorMod={2} />
         <Adjustments selectedColorMod={0} />
-        <!-- <Adjustments selectedColorMod={1} /> -->
+        <!-- <Adjustments selectedColorMod={1} /> 
         <Adjustments selectedColorMod={3} />
     </div>
 
@@ -34,6 +35,7 @@
 
     <About />
     <NotesToSelf />
+    -->
 </div>
 
 <style>

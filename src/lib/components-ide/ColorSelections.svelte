@@ -1,3 +1,5 @@
+<!-- Shows contrast values according to chroma.contrast -->
+
 <!-- Shows the colors the user has selected, also provides info about contrast, and options to swap colors. -->
 <script>
     import { colorStore } from "$lib/stores/colorStore.svelte.js";

@@ -110,9 +110,9 @@
         <div class="sv-wrap sv-nav-inner">
             <span class="sv-logo">◆ Lumina</span>
             <div class="sv-nav-links">
-                <a href="#features" class="sv-nav-link">Features</a>
-                <a href="#pricing" class="sv-nav-link">Pricing</a>
-                <a href="#blog" class="sv-nav-link">Blog</a>
+                <a href="#" class="sv-nav-link">Features</a>
+                <a href="#" class="sv-nav-link">Pricing</a>
+                <a href="#" class="sv-nav-link">Blog</a>
             </div>
             <button class="sv-btn-primary">Get started</button>
         </div>
@@ -136,9 +136,15 @@
     <section class="sv-features" id="features">
         <div class="sv-wrap">
             <div class="sv-section-header">
+                <div class="sv-badge" style="max-width: 40%; align-self: center">✦ Trusted by over 100 companies</div>
                 <h2 class="sv-h2">Everything you need to move fast</h2>
                 <p class="sv-section-sub">Simple, powerful, and designed to get out of your way.</p>
+                <div class="sv-hero-actions" style="margin: 1.1rem;">
+                    <button class="sv-btn-ghost sv-btn-lg">See how it works →</button>
+                    <button class="sv-btn-primary sv-btn-lg" style="color: var(--sv-bg-subtle)">Start free trial</button>
+                </div>
             </div>
+
             <div class="sv-cards">
                 {#each features as f}
                     <div class="sv-card">

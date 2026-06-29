@@ -2,23 +2,41 @@
     import { colorStore } from "$lib/stores/colorStore.svelte.js";
     import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
     import { themeStore } from "$lib/stores/theme.svelte.js";
+    import chroma from "chroma-js";
 
     // pickerValue reads from the input, but does not write to it.
     let pickerValue = $state("var(--bg)");
     let hexVal = $derived.by(() => resolveToHex(pickerValue));
+    let rgbVal = $derived.by(() => {
+        return `${chroma(hexVal).rgb()}`;
+    });
+    let hslVal = $derived.by(() => {
+        const [h, s, l] = chroma(hexVal).hsl();
+        return `${Math.round(h || 0)}°, ${(s * 100).toFixed(1)}%, ${(l * 100).toFixed(1)}%`;
+    });
+    let labVal = $derived.by(() => {
+        const [l, a, b] = chroma(hexVal).lab();
+        return `${l.toFixed(1)}, ${a.toFixed(1)}, ${b.toFixed(1)}`;
+    });
+
+    // flashes 'copied hex!' for a second when clicking on the hex value
+    let copiedHexText = $state("");
 
     let launchedPreviewYet = $state(false);
     let selectedAllColors = $state(false);
 
+    // creates an initial canvas for resolveToHex
+    const _ctx = typeof document !== "undefined" ? document.createElement("canvas").getContext("2d") : null;
+
     // converts 'var(--[value])' to the hex value, falls back on returning just the value
     function resolveToHex(value) {
-        if (typeof document === "undefined") return "#000000";
+        if (!_ctx) return "#000000";
+        if (!value.startsWith("var")) return value;
 
-        const raw = value.startsWith("var(") ? getComputedStyle(document.documentElement).getPropertyValue(value.slice(4, -1).trim()).trim() : value;
+        const raw = getComputedStyle(document.documentElement).getPropertyValue(value.slice(4, -1).trim()).trim();
 
-        const ctx = document.createElement("canvas").getContext("2d");
-        ctx.fillStyle = raw;
-        return ctx.fillStyle;
+        _ctx.fillStyle = raw;
+        return _ctx.fillStyle;
     }
 
     function inputtedColor(event) {
@@ -40,6 +58,12 @@
                 phaseStore.advance(2);
             }
         }
+    }
+
+    function copyHex() {
+        navigator.clipboard.writeText(hexVal);
+        copiedHexText = `Copied ${hexVal} to clipboard!`;
+        setTimeout(() => (copiedHexText = ""), 2000);
     }
 
     // colorStore index changes --> compute phaseStore, reset pickerValue
@@ -109,7 +133,15 @@
             </div>
         </div>
         <div class="otherSpace">
-            {hexVal}
+            <h4 class="colorTitle">{colorStore.cur.name}:<span class="copiedHex">{copiedHexText}</span></h4>
+            <div class="readoutGrid">
+                <span class="labelUnderlinable" onclick={() => copyHex()}>Hex</span><span class="valueUnderlinable" onclick={() => copyHex()}
+                    >{hexVal}</span
+                >
+                <span class="label">RGB</span><span class="value">{rgbVal}</span>
+                <span class="label">HSL</span><span class="value">{hslVal}</span>
+                <span class="label">LAB</span><span class="value">{labVal}</span>
+            </div>
         </div>
     </div>
 </div>
@@ -129,7 +161,7 @@
     .previewAndOptions {
         display: flex;
         flex-direction: row;
-        align-items: center;
+        align-items: start;
 
         gap: 1rem;
         width: 100%;
@@ -189,8 +221,17 @@
         flex: 1;
         align-self: stretch;
 
-        padding-left: 1rem;
-        padding-right: 1rem;
+        overflow: scroll;
+
+        padding: 1rem;
+    }
+
+    .colorTitle {
+        margin: 0rem;
+        padding: 0rem;
+        margin-bottom: 1rem;
+
+        text-transform: uppercase;
     }
 
     .dropzoneSmall {
@@ -210,5 +251,61 @@
         background: color-mix(in srgb, var(--text) 10%, transparent);
         border-color: color-mix(in srgb, var(--primary-hover) 30%, var(--text-muted));
         color: color-mix(in srgb, var(--primary-hover) 50%, var(--text-muted));
+    }
+
+    .readoutGrid {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        border: 2px solid var(--text);
+        border-radius: 4px;
+        overflow: scroll;
+        font-family: monospace;
+        font-size: 14px;
+        width: fit-content;
+
+        align-self: flex-start;
+        justify-self: center;
+    }
+
+    .readoutGrid .label {
+        padding: 0.3rem 0.8rem;
+        color: var(--text-muted);
+        border-right: 2px solid var(--text);
+        border-bottom: 2px solid var(--text);
+    }
+
+    .readoutGrid .value {
+        padding: 0.3rem 0.8rem;
+        border-bottom: 2px solid var(--text);
+    }
+
+    .readoutGrid span:nth-last-child(1),
+    .readoutGrid span:nth-last-child(2) {
+        border-bottom: none;
+    }
+
+    .labelUnderlinable {
+        padding: 0.3rem 0.8rem;
+        color: var(--text-muted);
+        border-right: 2px solid var(--text);
+        border-bottom: 2px solid var(--text);
+    }
+    .labelUnderlinable:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    .valueUnderlinable {
+        padding: 0.3rem 0.8rem;
+        border-bottom: 2px solid var(--text);
+    }
+    .valueUnderlinable:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .copiedHex {
+        margin-left: 0.5rem;
+        font-weight: normal;
+        text-transform: none;
     }
 </style>

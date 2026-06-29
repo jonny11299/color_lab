@@ -1,4 +1,7 @@
-<!-- Uses chroma.contrastAPCA to calculate contrast ratio -->
+<!-- Uses chroma.contrast to calculate, which is the WCAG standard but ignores hue, so it doesn't generate realistic results
+ (i.e. blue on red might give an extremely low value even though one can clearly see it.)
+ Hence the migration to using chroma.contrastAPCA
+-->
 
 <script>
     import { colorStore } from "$lib/stores/colorStore.svelte.js";
@@ -6,10 +9,6 @@
 
     let tailored = $derived(colorStore.tailored);
     let tailoredIndex = $derived(colorStore.curTailoredIndex);
-
-    const goodThreshold = 75; // 4.5 for WCAG
-
-    const decentThreshold = 45; // 3 for WCAG
 
     let contrastMessage = $derived.by(() => {
         const ts = tailored;
@@ -36,9 +35,9 @@
             return "contrast: failed";
         } else {
             if (largeTextOnly) {
-                return "contrast: acceptable";
+                return "contrast: large text only";
             } else {
-                return "contrast: flawless";
+                return "contrast: passed";
             }
         }
     });
@@ -94,13 +93,13 @@
             if (tailored[colorIndex1]?.name == "bg" || tailored[colorIndex1]?.name == "surface") {
                 return {
                     cl: "contrastSpanMuted",
-                    value: chroma.contrastAPCA(c1, c2).toFixed(0),
+                    value: chroma.contrast(c1, c2).toFixed(1),
                 };
             }
 
-            const contrast = chroma.contrastAPCA(c1, c2).toFixed(0);
+            const contrast = chroma.contrast(c1, c2).toFixed(1);
 
-            const cl = contrast > goodThreshold ? "contrastSpanGood" : contrast > decentThreshold ? "contrastSpanDecent" : "contrastSpanBad";
+            const cl = contrast > 4.5 ? "contrastSpanGood" : contrast > 3 ? "contrastSpanDecent" : "contrastSpanBad";
 
             return {
                 cl,
@@ -222,7 +221,7 @@
 
         display: grid;
         grid-template-columns: repeat(1, 1fr 3fr 1fr);
-        justify-content: space-evenly;
+        justify-content: space-between;
         align-items: center;
         justify-items: center;
 

@@ -6,8 +6,8 @@
 
 <div class="container">
     <div class="fromImageOptions">
-        <button class:inverse={fromImage} on:click={(fromImage = true)}>From Image</button>
-        <button class:inverse={!fromImage} on:click={(fromImage = false)}>Picker</button>
+        <button class:inverse={fromImage} onclick={() => (fromImage = true)}>From Image</button>
+        <button class:inverse={!fromImage} onclick={() => (fromImage = false)}>Picker</button>
     </div>
 
     <!-- Maintains context of the components even if hidden,

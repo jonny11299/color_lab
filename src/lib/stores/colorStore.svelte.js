@@ -1,4 +1,20 @@
 
+// creates an initial canvas for resolveToHex
+const _ctx = typeof document !== "undefined" ? document.createElement("canvas").getContext("2d") : null;
+
+// converts 'var(--[value])' to the hex value, falls back on returning just the value
+function resolveToHex(value) {
+    if (!_ctx) return "#000000";
+    if (!value.startsWith("var")) return value;
+
+    const raw = getComputedStyle(document.documentElement).getPropertyValue(value.slice(4, -1).trim()).trim();
+
+    _ctx.fillStyle = raw;
+    return _ctx.fillStyle;
+}
+
+
+
 function createColorStore() {
 
     let curIndex = $state(0); // iterator for the colorstore
@@ -117,17 +133,22 @@ function createColorStore() {
             curIndex = (curIndex + 1) % selections.length;
             curTailoredIndex = (curIndex) % tailored.length;
             // console.log("Cur index: " + curIndex);
+            if (tailored[curIndex].color.includes("var")) tailored[curIndex].color = resolveToHex(tailored[curIndex].color);
         },
 
         setSelectedIndex: (i) => {
             // console.log("Setting selected index to " + i);
             curIndex = i % selections.length; // the % guards against positive numbered, out-of-bounds selections
+
+            if (tailored[curIndex].color.includes("var")) tailored[curIndex].color = resolveToHex(tailored[curIndex].color);
         },
 
         // Also sets the 'selected' index for better workflow
         setTailoredIndex: (i) => {
             curTailoredIndex = i % tailored.length;
             curIndex = curTailoredIndex;
+
+            if (tailored[curIndex].color.includes("var")) tailored[curIndex].color = resolveToHex(tailored[curIndex].color);
         },
 
         // c should be a hex string here.
