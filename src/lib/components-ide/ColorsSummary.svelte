@@ -94,11 +94,11 @@
             if (tailored[colorIndex1]?.name == "bg" || tailored[colorIndex1]?.name == "surface") {
                 return {
                     cl: "contrastSpanMuted",
-                    value: chroma.contrastAPCA(c1, c2).toFixed(0),
+                    value: Math.abs(chroma.contrastAPCA(c1, c2)).toFixed(0),
                 };
             }
 
-            const contrast = chroma.contrastAPCA(c1, c2).toFixed(0);
+            const contrast = Math.abs(chroma.contrastAPCA(c1, c2)).toFixed(0);
 
             const cl = contrast > goodThreshold ? "contrastSpanGood" : contrast > decentThreshold ? "contrastSpanDecent" : "contrastSpanBad";
 

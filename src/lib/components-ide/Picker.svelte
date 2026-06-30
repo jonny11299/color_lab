@@ -2,42 +2,15 @@
     import { colorStore } from "$lib/stores/colorStore.svelte.js";
     import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
     import { themeStore } from "$lib/stores/theme.svelte.js";
+    import ReadoutGrid from "./ReadoutGrid.svelte";
     import chroma from "chroma-js";
 
     // pickerValue reads from the input, but does not write to it.
     let pickerValue = $state("var(--bg)");
-    let hexVal = $derived.by(() => resolveToHex(pickerValue));
-    let rgbVal = $derived.by(() => {
-        return `${chroma(hexVal).rgb()}`;
-    });
-    let hslVal = $derived.by(() => {
-        const [h, s, l] = chroma(hexVal).hsl();
-        return `${Math.round(h || 0)}°, ${(s * 100).toFixed(1)}%, ${(l * 100).toFixed(1)}%`;
-    });
-    let labVal = $derived.by(() => {
-        const [l, a, b] = chroma(hexVal).lab();
-        return `${l.toFixed(1)}, ${a.toFixed(1)}, ${b.toFixed(1)}`;
-    });
-
-    // flashes 'copied hex!' for a second when clicking on the hex value
-    let copiedHexText = $state("");
+    let hexVal = $derived.by(() => colorStore.resolveToHex(pickerValue));
 
     let launchedPreviewYet = $state(false);
     let selectedAllColors = $state(false);
-
-    // creates an initial canvas for resolveToHex
-    const _ctx = typeof document !== "undefined" ? document.createElement("canvas").getContext("2d") : null;
-
-    // converts 'var(--[value])' to the hex value, falls back on returning just the value
-    function resolveToHex(value) {
-        if (!_ctx) return "#000000";
-        if (!value.startsWith("var")) return value;
-
-        const raw = getComputedStyle(document.documentElement).getPropertyValue(value.slice(4, -1).trim()).trim();
-
-        _ctx.fillStyle = raw;
-        return _ctx.fillStyle;
-    }
 
     function inputtedColor(event) {
         const c = event.target.value;
@@ -62,7 +35,7 @@
 
     function copyHex() {
         navigator.clipboard.writeText(hexVal);
-        copiedHexText = `Copied ${hexVal} to clipboard!`;
+        copiedHexText = `(Copied)`;
         setTimeout(() => (copiedHexText = ""), 2000);
     }
 
@@ -81,7 +54,7 @@
 
         // set the picker's color
         pickerValue = colorStore.cur.color;
-        colorInputElement.value = resolveToHex(colorStore.cur.color);
+        colorInputElement.value = colorStore.resolveToHex(colorStore.cur.color);
     });
 
     // set the height (and therefore size) of the color picker
@@ -133,15 +106,8 @@
             </div>
         </div>
         <div class="otherSpace">
-            <h4 class="colorTitle">{colorStore.cur.name}:<span class="copiedHex">{copiedHexText}</span></h4>
-            <div class="readoutGrid">
-                <span class="labelUnderlinable" onclick={() => copyHex()}>Hex</span><span class="valueUnderlinable" onclick={() => copyHex()}
-                    >{hexVal}</span
-                >
-                <span class="label">RGB</span><span class="value">{rgbVal}</span>
-                <span class="label">HSL</span><span class="value">{hslVal}</span>
-                <span class="label">LAB</span><span class="value">{labVal}</span>
-            </div>
+            <ReadoutGrid {hexVal} />
+            <p>I need a 'next color, prev color' here... it feels like a bug when it auto-iterates</p>
         </div>
     </div>
 </div>

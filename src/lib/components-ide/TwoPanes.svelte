@@ -5,7 +5,7 @@
     import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
     import PreviewSite from "./PreviewSite.svelte";
     import ImageLoader from "./ImageLoader.svelte";
-    import Palette from "./Palette.svelte";
+    import Palette from "./PaletteSimple.svelte";
     import SiteSettings from "./SiteSettings.svelte";
     import CssEditor from "./CssEditor.svelte";
     import FileBar from "./FileBar.svelte";
@@ -185,9 +185,10 @@
             </div>
         </div>
 
+        <!--
         <div class="pane-bottom" class:pane-focused={focus === 1}>
-            <!-- svelte-ignore a11y_click_events_have_key_events -->
-            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <!-- svelte-ignore a11y_click_events_have_key_events 
+            <!-- svelte-ignore a11y_no_static_element_interactions 
             <div class="pane-header" onclick={() => (paneVisible[1] = !paneVisible[1])}>
                 Palette
 
@@ -204,6 +205,7 @@
                 {/if}
             </div>
         </div>
+        -->
 
         <div class="pane-bottom" class:pane-focused={focus === 3}>
             <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -389,6 +391,8 @@
         position: sticky;
         top: 0;
         align-self: flex-start;
+
+        z-index: 100;
     }
 
     .bottomToolbarSticky {

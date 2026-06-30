@@ -21,7 +21,7 @@ function createColorStore() {
     let curTailoredIndex = $state(0);
     let cur = $derived(tailored[curTailoredIndex]);
 
-    let hoveredPreview = $state(null); // Stores a temporary preview color. "Adjust.svelte" changes this value, "ColorSelections.svelte" reads it.
+    let hoveredPreview = $state(null); // Stores a temporary preview color. Set to null to return to selected color
 
     let maxQueueSize = 100;
     let undoQueue = $state([]);
@@ -154,6 +154,10 @@ function createColorStore() {
         // c should be a hex string here.
         setHoveredPreview: (c) => {
             hoveredPreview = c;
+        },
+
+        resolveToHex: (v) => {
+            return resolveToHex(v);
         },
 
         // go back one, return to 'redo'

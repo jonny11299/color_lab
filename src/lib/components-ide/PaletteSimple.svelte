@@ -4,8 +4,6 @@
     import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
 
     let swatches = $derived(imageStore.swatches);
-    let bins = $derived(imageStore.hueBins);
-    let greyScales = $derived(imageStore.greyScales);
     let copied = $state(null);
     let hoveredHex = $state(null);
 
@@ -50,7 +48,24 @@
 </script>
 
 <div class="container">
-    <h4>Extracted colors:</h4>
+    <!--
+    <div class="swatch-preview-wrapper">
+        <div
+            class="swatch-preview"
+            style="background-color: {hoveredHex ?? 'var(--bg'}"
+        ></div>
+        <div
+            class="copiedHex"
+            style="visibility: {hoveredHex ? 'visible' : 'hidden'}"
+        >
+            {copied ? "Copied!" : (hoveredHex ?? "l")}
+        </div>
+    </div>
+    <p>
+        Maybe add a little plus or minus button here for changing the size of
+        each item
+    </p>
+    -->
     <div class="swatchpalette">
         {#each swatches as s}
             <div
@@ -66,42 +81,6 @@
             <p>Empty for now. Upload an image to view its color swatches.</p>
         {/each}
     </div>
-
-    {#if greyScales?.length > 0}
-        <h4>greyscale:</h4>
-    {/if}
-    <div class="swatchpalette">
-        {#each greyScales as g}
-            <div
-                class="swatch"
-                style="background-color: {g}"
-                onclick={() => handleClick(g)}
-                onmouseenter={() => setHoveredHex(g)}
-                onmouseleave={() => setHoveredHex(null)}
-                role="button"
-                tabindex="0"
-            ></div>
-        {/each}
-    </div>
-
-    {#if bins?.length > 0}
-        <h4>sorted:</h4>
-    {/if}
-    {#each bins as b, i}
-        <div class="swatchpalette">
-            {#each b.set as s}
-                <div
-                    class="swatch"
-                    style="background-color: {s}"
-                    onclick={() => handleClick(s)}
-                    onmouseenter={() => setHoveredHex(s)}
-                    onmouseleave={() => setHoveredHex(null)}
-                    role="button"
-                    tabindex="0"
-                ></div>
-            {/each}
-        </div>
-    {/each}
 </div>
 
 <style>
@@ -124,7 +103,6 @@
         width: 100%;
         padding: 0px;
         margin: 0px;
-        margin-top: 1rem;
 
         justify-content: center;
     }

@@ -5,7 +5,7 @@
     import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
     import PreviewSite from "./PreviewSite.svelte";
     import ImageLoader from "./ImageLoader.svelte";
-    import Palette from "./Palette.svelte";
+    import Palette from "./PaletteSimple.svelte";
     import SiteSettings from "./SiteSettings.svelte";
 
     import eyeOpen from "$lib/icons/eye-open.svg?raw";
