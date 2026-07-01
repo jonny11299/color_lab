@@ -138,7 +138,7 @@ function readableSet(rows, bg1, bg2, threshold = APCA_THRESHOLD) {
 
     // Dedup exact repeats (rows can share a near-identical dark cap) while
     // preserving order and the possibility of an empty result.
-    return { name: "Readable on both", set: [...new Set(picks)] };
+    return { name: "Readable", set: [...new Set(picks)] };
 }
 
 /**
