@@ -3,6 +3,7 @@
     import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
     import { themeStore } from "$lib/stores/theme.svelte.js";
     import ReadoutGrid from "./ReadoutGrid.svelte";
+    import Harmonies from "./Harmonies.svelte";
     import chroma from "chroma-js";
 
     // pickerValue reads from the input, but does not write to it.
@@ -106,8 +107,11 @@
             </div>
         </div>
         <div class="otherSpace">
+            <!--
             <ReadoutGrid {hexVal} />
-            <p>I need a 'next color, prev color' here... it feels like a bug when it auto-iterates</p>
+            -->
+            <!-- <p>I need a 'next color, prev color' here... it feels like a bug when it auto-iterates</p> -->
+            <Harmonies {hexVal} />
         </div>
     </div>
 </div>

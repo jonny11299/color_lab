@@ -5,7 +5,8 @@
 
     let swatches = $derived(imageStore.swatches);
     let bins = $derived(imageStore.hueBins);
-    let greyScales = $derived(imageStore.greyScales);
+    let greyScale = $derived(imageStore.greyScale);
+    let greyScaleFlattened = $derived(imageStore.greyScaleFlattened);
     let copied = $state(null);
     let hoveredHex = $state(null);
 
@@ -50,56 +51,86 @@
 </script>
 
 <div class="container">
-    <h4>Extracted colors:</h4>
-    <div class="swatchpalette">
-        {#each swatches as s}
-            <div
-                class="swatch"
-                style="background-color: {s.hex}"
-                onclick={() => handleClick(s.hex)}
-                onmouseenter={() => setHoveredHex(s.hex)}
-                onmouseleave={() => setHoveredHex(null)}
-                role="button"
-                tabindex="0"
-            ></div>
-        {:else}
-            <p>Empty for now. Upload an image to view its color swatches.</p>
-        {/each}
-    </div>
-
-    {#if greyScales?.length > 0}
-        <h4>greyscale:</h4>
+    {#if swatches?.length > 0}
+        <div class="row">
+            <h4 class="row-label">Extracted colors:</h4>
+            <div class="divider"></div>
+            <div class="swatchpalette">
+                {#each swatches as s}
+                    <div
+                        class="swatch"
+                        style="background-color: {s.hex}"
+                        onclick={() => handleClick(s.hex)}
+                        onmouseenter={() => setHoveredHex(s.hex)}
+                        onmouseleave={() => setHoveredHex(null)}
+                        role="button"
+                        tabindex="0"
+                    ></div>
+                {/each}
+            </div>
+        </div>
+    {:else if !greyScale?.length && !greyScaleFlattened?.length && !bins?.length}
+        <p class="empty-message">Empty for now. Upload an image to view its color swatches.</p>
     {/if}
-    <div class="swatchpalette">
-        {#each greyScales as g}
-            <div
-                class="swatch"
-                style="background-color: {g}"
-                onclick={() => handleClick(g)}
-                onmouseenter={() => setHoveredHex(g)}
-                onmouseleave={() => setHoveredHex(null)}
-                role="button"
-                tabindex="0"
-            ></div>
-        {/each}
-    </div>
 
-    {#if bins?.length > 0}
-        <h4>sorted:</h4>
+    {#if greyScaleFlattened?.length > 0}
+        <div class="row">
+            <h4 class="row-label">greyscale:</h4>
+            <div class="divider"></div>
+            <div class="swatchpalette">
+                {#each greyScaleFlattened as g}
+                    <div
+                        class="swatch"
+                        style="background-color: {g}"
+                        onclick={() => handleClick(g)}
+                        onmouseenter={() => setHoveredHex(g)}
+                        onmouseleave={() => setHoveredHex(null)}
+                        role="button"
+                        tabindex="0"
+                    ></div>
+                {/each}
+            </div>
+        </div>
     {/if}
+
+    {#if greyScale?.length > 0}
+        <div class="row">
+            <h4 class="row-label">near-greys:</h4>
+            <div class="divider"></div>
+            <div class="swatchpalette">
+                {#each greyScale as g}
+                    <div
+                        class="swatch"
+                        style="background-color: {g}"
+                        onclick={() => handleClick(g)}
+                        onmouseenter={() => setHoveredHex(g)}
+                        onmouseleave={() => setHoveredHex(null)}
+                        role="button"
+                        tabindex="0"
+                    ></div>
+                {/each}
+            </div>
+        </div>
+    {/if}
+
     {#each bins as b, i}
-        <div class="swatchpalette">
-            {#each b.set as s}
-                <div
-                    class="swatch"
-                    style="background-color: {s}"
-                    onclick={() => handleClick(s)}
-                    onmouseenter={() => setHoveredHex(s)}
-                    onmouseleave={() => setHoveredHex(null)}
-                    role="button"
-                    tabindex="0"
-                ></div>
-            {/each}
+        <div class="row">
+            <!-- name the bin: -->
+            <h4 class="row-label">{b.name.replaceAll("_", " ") ?? "unknown"}{b.name?.includes("misc") ? "" : "s"}:</h4>
+            <div class="divider"></div>
+            <div class="swatchpalette">
+                {#each b.set as s}
+                    <div
+                        class="swatch"
+                        style="background-color: {s}"
+                        onclick={() => handleClick(s)}
+                        onmouseenter={() => setHoveredHex(s)}
+                        onmouseleave={() => setHoveredHex(null)}
+                        role="button"
+                        tabindex="0"
+                    ></div>
+                {/each}
+            </div>
         </div>
     {/each}
 </div>
@@ -111,9 +142,38 @@
         max-width: 100%;
         min-width: 10rem;
 
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        display: grid;
+        grid-template-columns: 5rem 1px 1fr;
+        align-items: center; /* centers each row's items against its own tallest item */
+        column-gap: 0.75rem;
+        row-gap: 1rem;
+    }
+
+    /* lets the row's children (label, divider, palette) become direct grid items
+       of .container, so they land in the shared column tracks */
+    .row {
+        display: contents;
+    }
+
+    .row-label {
+        margin: 0;
+        text-align: right;
+        white-space: normal;
+        word-wrap: break-word;
+        line-height: 1.15;
+
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        text-transform: capitalize;
+        color: var(--text-secondary, var(--text));
+        opacity: 0.85;
+    }
+
+    .divider {
+        width: 1px;
+        align-self: stretch; /* full row height, unlike the centered label/palette */
+        background: var(--border);
     }
 
     .swatchpalette {
@@ -121,20 +181,23 @@
         flex-direction: row;
         flex-wrap: wrap;
         gap: 0px;
-        width: 100%;
+        min-width: 0;
         padding: 0px;
         margin: 0px;
-        margin-top: 1rem;
 
         justify-content: center;
     }
     .swatch {
-        /* border: 1px solid var(--border);*/
-        min-width: 2rem;
+        min-width: 1.7rem;
         aspect-ratio: 1;
         padding: 0px;
         margin: 0px;
         cursor: pointer;
+    }
+
+    .empty-message {
+        grid-column: 1 / -1;
+        text-align: center;
     }
 
     .tooltip {
