@@ -25,7 +25,6 @@
         pickerValue = c;
         colorStore.setCurrentColorTailored(c);
         if (!selectedAllColors) {
-            colorStore.iterate();
             // we should launch the preview once the user selects a background color.
             if (!launchedPreviewYet) {
                 launchedPreviewYet = true;
@@ -98,19 +97,23 @@
                     type="color"
                     id="colorInput"
                     bind:this={colorInputElement}
-                    oninput={inputtedColor}
                     // updates on dragging around on the picker
-                    onchange={closedPicker}
+                    oninput={inputtedColor}
                     // updates on closing the picker
+                    onchange={closedPicker}
                     style="height: {getMaxHeight()}; width: {getMaxHeight()};"
                 />
+            </div>
+            <div class="prevNextButtons">
+                <button class="btn" onclick={colorStore.iterateReverse}>prev</button>
+                <button class="btn" onclick={colorStore.iterate}>next</button>
             </div>
         </div>
         <div class="otherSpace">
             <!--
             <ReadoutGrid {hexVal} />
             -->
-            <!-- <p>I need a 'next color, prev color' here... it feels like a bug when it auto-iterates</p> -->
+            <!-- Harmonies also contains the 'hex val' element... -->
             <Harmonies {hexVal} />
         </div>
     </div>
@@ -277,5 +280,48 @@
         margin-left: 0.5rem;
         font-weight: normal;
         text-transform: none;
+    }
+
+    .prevNextButtons {
+        border: none;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: row;
+        margin-top: 1rem;
+        color: var(--text);
+
+        align-items: center;
+        justify-items: center;
+        justify-content: center;
+        align-content: center;
+    }
+    .btn {
+        width: 100%;
+        min-width: 3rem;
+    }
+
+    .row {
+        display: contents;
+    }
+
+    .row-label {
+        margin: 0;
+        text-align: right;
+        white-space: normal;
+        word-wrap: break-word;
+        line-height: 1.15;
+
+        font-size: 0.85rem;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        /* no text-transform: names are display-ready and mixed-case (& , °, +150) */
+        color: var(--text-secondary, var(--text));
+        opacity: 0.85;
+    }
+
+    .divider {
+        width: 1px;
+        align-self: stretch;
+        background: var(--border);
     }
 </style>

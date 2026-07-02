@@ -106,6 +106,11 @@
                 <!--
                 <ReadoutGrid {hexVal} />
                 -->
+
+                <div class="prevNextButtons">
+                    <button class="btn" onclick={colorStore.iterateReverse}>prev</button>
+                    <button class="btn" onclick={colorStore.iterate}>next</button>
+                </div>
             </div>
             <div class="otherSpace">
                 <Palette />
@@ -167,5 +172,23 @@
     .dropzone.active {
         border-color: var(--primary-hover);
         color: var(--primary-hover);
+    }
+
+    .prevNextButtons {
+        border: none;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: row;
+        margin-top: 1rem;
+        color: var(--text);
+
+        align-items: center;
+        justify-items: center;
+        justify-content: center;
+        align-content: center;
+    }
+    .btn {
+        width: 100%;
+        min-width: 3rem;
     }
 </style>

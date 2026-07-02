@@ -50,6 +50,7 @@
     let borderWidthPx = $derived(`${borderWidth}px`);
     let borderRadiusPx = $derived(`${borderRadius}px`);
     let borderRadiusSmPx = $derived(`${Math.round(borderRadius * 0.6)}px`);
+    let borderRadiusHugePx = $derived(`${Math.round(borderRadius * 3)}px`);
 
     const features = [
         {
@@ -103,6 +104,7 @@
     style:--sv-border-width={borderWidthPx}
     style:--sv-radius={borderRadiusPx}
     style:--sv-radius-sm={borderRadiusSmPx}
+    style:--sv-radius-huge={borderRadiusHugePx}
     style:--sv-type-scale={typeScale}
 >
     <!-- NAV -->
@@ -425,7 +427,7 @@
         background: color-mix(in srgb, var(--sv-accent) 12%, transparent);
         color: var(--sv-accent);
         padding: 0.3rem 0.9rem;
-        border-radius: 999px;
+        border-radius: var(--sv-radius-huge);
         font-size: 0.78rem;
         font-weight: 600;
         border: var(--sv-border-width) solid color-mix(in srgb, var(--sv-accent) 35%, transparent);

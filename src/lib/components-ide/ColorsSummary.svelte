@@ -7,15 +7,18 @@
     let tailored = $derived(colorStore.tailored);
     let tailoredIndex = $derived(colorStore.curTailoredIndex);
 
-    const goodThreshold = 75; // 4.5 for WCAG
+    const flawlessThreshold = 75; // 4.5 for WCAG
 
-    const decentThreshold = 45; // 3 for WCAG
+    const greatThreshold = 45;
+
+    const acceptableThreshold = 30;
 
     let contrastMessage = $derived.by(() => {
         const ts = tailored;
 
         let failed = false;
-        let largeTextOnly = false;
+        let nearBad = false;
+        let decent = false;
 
         ts.forEach((item, i) => {
             if (calculateContrast(i, "bg").cl === "contrastSpanBad") {
@@ -24,23 +27,30 @@
             if (calculateContrast(i, "surface").cl === "contrastSpanBad") {
                 failed = true;
             }
+            if (calculateContrast(i, "bg").cl === "contrastSpanNearBad") {
+                nearBad = true;
+            }
+            if (calculateContrast(i, "surface").cl === "contrastSpanNearBad") {
+                nearBad = true;
+            }
             if (calculateContrast(i, "bg").cl === "contrastSpanDecent") {
-                largeTextOnly = true;
+                decent = true;
             }
             if (calculateContrast(i, "surface").cl === "contrastSpanDecent") {
-                largeTextOnly = true;
+                decent = true;
             }
         });
 
         if (failed) {
             return "contrast: failed";
-        } else {
-            if (largeTextOnly) {
-                return "contrast: acceptable";
-            } else {
-                return "contrast: flawless";
-            }
         }
+        if (nearBad) {
+            return "contrast: acceptable";
+        }
+        if (decent) {
+            return "contrast: good";
+        }
+        return "contrast: flawless";
     });
 
     function selectIndex(i) {
@@ -100,7 +110,14 @@
 
             const contrast = Math.abs(chroma.contrastAPCA(c1, c2)).toFixed(0);
 
-            const cl = contrast > goodThreshold ? "contrastSpanGood" : contrast > decentThreshold ? "contrastSpanDecent" : "contrastSpanBad";
+            const cl =
+                contrast > flawlessThreshold
+                    ? "contrastSpanGood"
+                    : contrast > greatThreshold
+                      ? "contrastSpanDecent"
+                      : contrast > acceptableThreshold
+                        ? "contrastSpanNearBad"
+                        : "contrastSpanBad";
 
             return {
                 cl,
@@ -137,7 +154,7 @@
                                     class="contrastSwatch"
                                     style="background: {getRenderColor(t, j)}; 
                 border-color: {tailoredIndex === j ? `var(--text)` : `var(--bg)`};
-                 border-width: {tailoredIndex === j ? `1px` : `1`}"
+                 border-width: {tailoredIndex === j ? `0px` : `0`}"
                                 ></div>
                             </div>
                             <div class="contrastSwatchRightSide">
@@ -182,7 +199,7 @@
                             class="swatch"
                             style="background: {getRenderColor(t, j)}; 
                 border-color: {tailoredIndex === j ? `var(--text)` : `var(--bg)`};
-                 border-width: {tailoredIndex === j ? `0px` : `0`}"
+                 border-width: {tailoredIndex === j ? `2px` : `0`}"
                             onclick={() => selectIndex(j)}
                         ></div>
 
@@ -208,7 +225,14 @@
             {/each}
         </div>
     </div>
-    <div class="title" class:contrastFailed={contrastMessage.includes("failed")} style="margin-left: 1rem;">{contrastMessage}</div>
+    <div
+        class="title"
+        class:contrastFailed={contrastMessage.includes("failed")}
+        style="margin-left: 1rem;"
+        onclick={() => window.open("https://git.apcacontrast.com/documentation/APCAeasyIntro.html", "_blank")}
+    >
+        {contrastMessage}
+    </div>
 </div>
 
 <style>
@@ -230,6 +254,11 @@
         padding-bottom: 0.5rem;
 
         overflow-x: scroll;
+    }
+
+    .title:hover {
+        text-decoration: underline;
+        cursor: pointer;
     }
 
     .item {
@@ -320,7 +349,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border: none;
+        border: 0px dashed var(--text);
         color: var(--text);
         border-radius: 0px;
 
@@ -391,6 +420,9 @@
         color: red;
     }
     .contrastSpanDecent {
+        color: var(--text-warn);
+    }
+    .contrastSpanNearBad {
         text-decoration: underline;
         color: var(--text-warn);
     }

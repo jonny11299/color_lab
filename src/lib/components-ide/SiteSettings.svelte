@@ -21,26 +21,18 @@
     let tailoredColors = $derived(colorStore.tailored);
 </script>
 
+<!--
 <div class="columns">
-    <p>Fix picker experience (should not iterate when selecting)</p>
-    <p>Wire in 'clicking a row in the picker selects that color' functionality</p>
-    <p>Wire in site settings</p>
-    <p>Change the name for the "readable" part</p>
-    <!-- muted because of reactivity delays in Picker
     <ColorSelections />
-    <div class="adjustmentsColumn">
-        <Adjustments selectedColorMod={2} />
-        <Adjustments selectedColorMod={0} />
-        <!-- <Adjustments selectedColorMod={1} /> 
-        <Adjustments selectedColorMod={3} />
-    </div>
 
     <ScaleSelections />
 
     <About />
     <NotesToSelf />
-    -->
+
 </div>
+    -->
+<ScaleSelections />
 
 <style>
     .columns {

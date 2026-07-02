@@ -29,10 +29,10 @@
     --bg: #0f0f10;
     --surface: #1c1c1e;
     --divider: #333334;
-    --text: #e2e2e2;
+    --text: #d3d3d3;
     --text-muted: #ababab;
     --text-warn: #fd9999;
-    --primary: #b6b6b6;
+    --primary: #9c9c9c;
     --primary-hover: #61b554;
     --border: #505052;
 }
@@ -46,7 +46,7 @@
     --text-muted: #3a3a3a;
     --text-warn: #500000;
     --primary: #1f1f1f;
-    --primary-hover: #404040;
+    --primary-hover: #005c62;
     /* was a blue/green accent — replaced with a lightness shift */
     --border: #1f1f1f;
 }

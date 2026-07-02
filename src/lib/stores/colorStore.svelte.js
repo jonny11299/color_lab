@@ -135,6 +135,13 @@ function createColorStore() {
             // console.log("Cur index: " + curIndex);
             if (tailored[curIndex].color.includes("var")) tailored[curIndex].color = resolveToHex(tailored[curIndex].color);
         },
+        // iterates both selected and tailored colors
+        iterateReverse: () => {
+            curIndex = (curIndex + selections.length - 1) % selections.length;
+            curTailoredIndex = (curIndex) % tailored.length;
+            // console.log("Cur index: " + curIndex);
+            if (tailored[curIndex].color.includes("var")) tailored[curIndex].color = resolveToHex(tailored[curIndex].color);
+        },
 
         setSelectedIndex: (i) => {
             // console.log("Setting selected index to " + i);
