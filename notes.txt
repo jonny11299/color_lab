@@ -12,8 +12,8 @@ And webknobs
 
 
 7/2/26:
-- remove the raw color drop 
-- bring back the borders for the selected color
+- need a logo 
+
 - functioning export window
 - onboarding biz 
 - help button w tutorial / walkthrough
