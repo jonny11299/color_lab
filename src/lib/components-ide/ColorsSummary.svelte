@@ -13,6 +13,33 @@
 
     const acceptableThreshold = 30;
 
+    const borderContrastThreshold = 2; // the threshold to switch from default border color to opposite-colored border
+
+    let leftPressed = $state(false);
+    let rightPressed = $state(false);
+
+    let cachedTextColor = null;
+
+    function handleKeydown(event) {
+        if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            colorStore.iterateReverse();
+            leftPressed = true;
+        } else if (event.key === "ArrowRight") {
+            event.preventDefault();
+            colorStore.iterate();
+            rightPressed = true;
+        }
+    }
+
+    function handleKeyup(event) {
+        if (event.key === "ArrowLeft") {
+            leftPressed = false;
+        } else if (event.key === "ArrowRight") {
+            rightPressed = false;
+        }
+    }
+
     let contrastMessage = $derived.by(() => {
         const ts = tailored;
 
@@ -60,6 +87,34 @@
 
     function getRenderColor(t, j) {
         return colorStore.hoveredPreview && colorStore.curTailoredIndex === j ? colorStore.hoveredPreview : t.color;
+    }
+
+    function getTextColor() {
+        if (cachedTextColor) return cachedTextColor;
+        if (typeof document === "undefined") return "#000"; // SSR guard
+        cachedTextColor = getComputedStyle(document.documentElement).getPropertyValue("--text").trim();
+        return cachedTextColor;
+    }
+
+    // picks a border color that stays visible against the swatch's own background
+    function getBorderColor(hex) {
+        try {
+            if (!hex || hex.includes("var(--")) return "var(--text)";
+
+            const textColor = getTextColor();
+            const contrast = chroma.contrast(hex, textColor);
+
+            if (contrast < borderContrastThreshold) {
+                // too close — fall back to whichever of black/white contrasts better
+                const whiteContrast = chroma.contrast(hex, "white");
+                const blackContrast = chroma.contrast(hex, "black");
+                return whiteContrast > blackContrast ? "white" : "black";
+            }
+
+            return textColor;
+        } catch (e) {
+            return "var(--text)";
+        }
     }
 
     // calculates the contrast between the two colors
@@ -133,6 +188,8 @@
     }
 </script>
 
+<svelte:window on:keydown={handleKeydown} on:keyup={handleKeyup} />
+
 <div class="container">
     <!--
     <div class="header">
@@ -191,15 +248,17 @@
     </div>
 
     <div class="item">
+        <div class="prevNextButtons"></div>
         <div class="swatches">
+            <button class="btn" class:isActive={leftPressed} onclick={colorStore.iterateReverse}>←</button>
+
             {#each tailored as t, j}
                 <div class="swatchColumn">
                     <div class="swatchAndName">
                         <div
                             class="swatch"
-                            style="background: {getRenderColor(t, j)}; 
-                border-color: {tailoredIndex === j ? `var(--text)` : `var(--bg)`};
-                 border-width: {tailoredIndex === j ? `2px` : `0`}"
+                            class:selected={tailoredIndex === j}
+                            style="background: {getRenderColor(t, j)}; --border-color: {getBorderColor(getRenderColor(t, j))}"
                             onclick={() => selectIndex(j)}
                         ></div>
 
@@ -223,6 +282,7 @@
                     </div>
                 </div>
             {/each}
+            <button class="btn" class:isActive={rightPressed} onclick={colorStore.iterate}>→</button>
         </div>
     </div>
     <div
@@ -318,7 +378,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 0px dotted var(--border);
+        border: 2px solid transparent;
         color: var(--text);
 
         width: 4rem;
@@ -328,6 +388,12 @@
     }
     .swatch:hover {
         cursor: pointer;
+        border-style: dotted;
+        border-color: var(--border-color, var(--text));
+    }
+    .swatch.selected {
+        border-style: solid;
+        border-color: var(--border-color, var(--text));
     }
 
     /* these spacial dimensions should match .swatch's */
@@ -404,6 +470,42 @@
         align-items: center;
         justify-items: end;
         text-align: right;
+    }
+
+    .prevNextButtons {
+        border: none;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: row;
+        margin-top: 1rem;
+        color: var(--text);
+
+        align-items: center;
+        justify-items: center;
+        justify-content: center;
+        align-content: center;
+    }
+    .btn {
+        border: none;
+        width: 100%;
+        min-width: 3rem;
+        transition: transform 0.5s ease 0.5s;
+    }
+    .btn:active {
+        transform: scale(0.9);
+    }
+
+    /* if you also want the hover look to show while held */
+    .btn:hover,
+    .btn.isActive {
+        /* whatever your hover styles are, e.g. background/opacity */
+        background: color-mix(in srgb, var(--text) 10%, transparent);
+        border-color: color-mix(in srgb, var(--primary-hover) 30%, var(--text-muted));
+        color: color-mix(in srgb, var(--primary-hover) 50%, var(--text-muted));
+
+        /* going active: instant, no delay */
+        transform: scale(0.9);
+        transition: transform 0.05s ease;
     }
 
     .contrastSpanHolder {

@@ -6,10 +6,10 @@
     paramStore.params;
 
     const rangeFields = [
-        { key: "muteStrength", label: "Mute strength", min: 0, max: 1, step: 0.02 },
         { key: "typeScale", label: "Type scale", min: 1, max: 1.6, step: 0.001 },
         { key: "borderWidth", label: "Border width", min: 0, max: 8, step: 1, unit: "px" },
         { key: "borderRadius", label: "Border radius", min: 0, max: 50, step: 1, unit: "px" },
+        { key: "muteStrength", label: "Mute strength", min: 0, max: 1, step: 0.02 },
     ];
 
     function fillPercent(f) {

@@ -10,10 +10,10 @@
         secondary?: string /* supporting actions, ghost buttons, and border tones */;
         accent?: string /* badges, highlights, decorative pops */;
         /* Scale controls */
-        muteStrength?: number /* 0 = no muting, 1 = full muting */;
         typeScale?: number /* modular scale ratio, e.g. 1.0 flat, 1.25, 1.333, 1.5 */;
         borderWidth?: number /* border thickness in px, 0–8 */;
         borderRadius?: number /* corner radius in px, 0–50 */;
+        muteStrength?: number /* 0 = no muting, 1 = full muting */;
     }
 
     // Color definitions.
@@ -25,10 +25,10 @@
         primary = "#5c6ac4",
         secondary = "#8892d4",
         accent = "#f49342",
-        muteStrength = 1,
         typeScale = 1.333,
         borderWidth = 1,
         borderRadius = 10,
+        muteStrength = 1,
     }: Props = $props();
 
     /*    

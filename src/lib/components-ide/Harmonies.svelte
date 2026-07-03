@@ -2,6 +2,7 @@
     import { colorStore } from "$lib/stores/colorStore.svelte.js";
     import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
     import { generateHarmonies } from "$lib/utils/harmonies.js";
+    import chroma from "chroma-js";
 
     let { hexVal } = $props();
 
@@ -19,6 +20,10 @@
 
     let hexInputEl;
 
+    const contrastThreshold = 2; // the threshold to switch from default outline to opposite-colored outline
+
+    let cachedTextColor = null;
+
     function handleEnterClick() {
         hexEntered(hexInputEl.value);
     }
@@ -32,7 +37,7 @@
     function handleClick(hex) {
         copyHex(hex);
         colorStore.setColor(selectedSwatch, hex);
-        if (phaseStore.phase < 3) colorStore.iterate(); // we should stop auto-iterating the selections upon clicking palette, after all colors are selected
+        // if (phaseStore.phase < 3) colorStore.iterate(); // we should stop auto-iterating the selections upon clicking palette, after all colors are selected
 
         console.log("selection now " + selectedSwatch);
 
@@ -63,6 +68,31 @@
         if (!launchedPreviewYet) {
             launchedPreviewYet = true;
             phaseStore.advance(2);
+        }
+    }
+
+    function getTextColor() {
+        if (cachedTextColor) return cachedTextColor;
+        if (typeof document === "undefined") return "#000"; // SSR guard
+        cachedTextColor = getComputedStyle(document.documentElement).getPropertyValue("--text").trim();
+        return cachedTextColor;
+    }
+
+    function getOutlineColor(hex) {
+        try {
+            const textColor = getTextColor();
+            const contrast = chroma.contrast(hex, textColor);
+
+            if (contrast < contrastThreshold) {
+                // too close — fall back to whichever of black/white contrasts better
+                const whiteContrast = chroma.contrast(hex, "white");
+                const blackContrast = chroma.contrast(hex, "black");
+                return whiteContrast > blackContrast ? "white" : "black";
+            }
+
+            return textColor;
+        } catch (e) {
+            return "var(--text)";
         }
     }
 </script>
@@ -128,7 +158,9 @@
                 {#each b.set as s}
                     <div
                         class="swatch"
-                        style="background-color: {s}"
+                        style="background-color: {s}; --outline-color: {getOutlineColor(s)}"
+                        class:selected={s === colorStore.cur.color}
+                        class:hovered={s === colorStore.hoveredPreview}
                         onclick={() => handleClick(s)}
                         onmouseenter={() => setHoveredHex(s)}
                         onmouseleave={() => setHoveredHex(null)}
@@ -205,7 +237,16 @@
         z-index: 1;
     }
     .swatch.copied {
-        outline: 2px solid var(--text);
+        outline: 2px solid var(--outline-color, var(--text));
+        outline-offset: -2px;
+    }
+
+    .swatch.hovered {
+        outline: 2px dotted var(--outline-color, var(--text));
+        outline-offset: -2px;
+    }
+    .swatch.selected {
+        outline: 2px solid var(--outline-color, var(--text));
         outline-offset: -2px;
     }
 
@@ -259,6 +300,7 @@
     .copyBtn:hover {
         color: var(--text);
         border-color: var(--text);
+        border: 1px solid var(--border);
     }
 
     .copyBtn:active {

@@ -1,3 +1,5 @@
+<!-- This is the one that runs from the top nav bar -->
+
 <script>
     import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
     import { generateCss } from "$lib/utils/cssGenerator.js";

@@ -3,15 +3,6 @@
 function createParamStore() {
     let params = $state([
         {
-            name: "Mute Strength",
-            key: "muteStrength",
-            min: 0,
-            max: 1.5,
-            step: 0.01,
-            cur: 0.5,
-            fixed: 1, // num digits to display for toFixed
-        },
-        {
             name: "Type Scale",
             key: "typeScale",
             min: 1,
@@ -40,6 +31,15 @@ function createParamStore() {
             fixed: 1,
             unit: "px"
         },
+        {
+            name: "Mute Strength",
+            key: "muteStrength",
+            min: 0,
+            max: 1.5,
+            step: 0.01,
+            cur: 0.5,
+            fixed: 1, // num digits to display for toFixed
+        }
     ]);
 
     return {
@@ -76,10 +76,10 @@ function createParamStore() {
 
         // will certainly need to be changed if we update the 'params = $state([...])'
         setToDefaults: () => {
-            params[0] = 0.5;
-            params[1] = 1.2;
-            params[2] = 3;
-            params[3] = 10;
+            params[0] = 1.2;
+            params[1] = 3;
+            params[2] = 10;
+            params[3] = 0.5;
         }
     }
 

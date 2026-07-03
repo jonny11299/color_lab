@@ -2,6 +2,7 @@
     import { imageStore } from "$lib/stores/imageStore.svelte.js";
     import { colorStore } from "$lib/stores/colorStore.svelte.js";
     import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
+    import chroma from "chroma-js";
 
     let swatches = $derived(imageStore.swatches);
     let bins = $derived(imageStore.hueBins);
@@ -10,10 +11,14 @@
     let copied = $state(null);
     let hoveredHex = $state(null);
 
+    const contrastThreshold = 2; // the threshold to switch from default outline to opposite-colored outline
+
     let selectedSwatch = $derived(colorStore.curIndex);
 
     let launchedPreviewYet = $state(false);
     let selectedAllColors = $state(false);
+
+    let cachedTextColor = null;
 
     $effect(() => {
         let i = colorStore.curIndex;
@@ -29,7 +34,7 @@
     function handleClick(hex) {
         copyHex(hex);
         colorStore.setColor(selectedSwatch, hex);
-        if (phaseStore.phase < 3) colorStore.iterate(); // we should stop auto-iterating the selections upon clicking palette, after all colors are selected
+        // if (phaseStore.phase < 3) colorStore.iterate(); // we should stop auto-iterating the selections upon clicking palette, after all colors are selected
 
         console.log("selection now " + selectedSwatch);
 
@@ -48,10 +53,36 @@
         hoveredHex = hex;
         colorStore.setHoveredPreview(hex);
     }
+
+    function getTextColor() {
+        if (cachedTextColor) return cachedTextColor;
+        if (typeof document === "undefined") return "#000"; // SSR guard
+        cachedTextColor = getComputedStyle(document.documentElement).getPropertyValue("--text").trim();
+        return cachedTextColor;
+    }
+
+    function getOutlineColor(hex) {
+        try {
+            const textColor = getTextColor();
+            const contrast = chroma.contrast(hex, textColor);
+
+            if (contrast < contrastThreshold) {
+                // too close — fall back to whichever of black/white contrasts better
+                const whiteContrast = chroma.contrast(hex, "white");
+                const blackContrast = chroma.contrast(hex, "black");
+                return whiteContrast > blackContrast ? "white" : "black";
+            }
+
+            return textColor;
+        } catch (e) {
+            return "var(--text)";
+        }
+    }
 </script>
 
 <div class="container">
     {#if swatches?.length > 0}
+        <!-- we don't actually want to see the raw extracted colors, should just be sorted.
         <div class="row">
             <h4 class="row-label">Extracted colors:</h4>
             <div class="divider"></div>
@@ -59,7 +90,7 @@
                 {#each swatches as s}
                     <div
                         class="swatch"
-                        style="background-color: {s.hex}"
+                        style="background-color: {s.hex}; --outline-color: {getOutlineColor(s.hex)}"
                         onclick={() => handleClick(s.hex)}
                         onmouseenter={() => setHoveredHex(s.hex)}
                         onmouseleave={() => setHoveredHex(null)}
@@ -69,6 +100,7 @@
                 {/each}
             </div>
         </div>
+        -->
     {:else if !greyScale?.length && !greyScaleFlattened?.length && !bins?.length}
         <p class="empty-message">Empty for now. Upload an image to view its color swatches.</p>
     {/if}
@@ -81,7 +113,9 @@
                 {#each greyScaleFlattened as g}
                     <div
                         class="swatch"
-                        style="background-color: {g}"
+                        style="background-color: {g}; --outline-color: {getOutlineColor(g)}"
+                        class:selected={g === colorStore.cur.color}
+                        class:hovered={g === colorStore.hoveredPreview}
                         onclick={() => handleClick(g)}
                         onmouseenter={() => setHoveredHex(g)}
                         onmouseleave={() => setHoveredHex(null)}
@@ -101,7 +135,9 @@
                 {#each greyScale as g}
                     <div
                         class="swatch"
-                        style="background-color: {g}"
+                        style="background-color: {g}; --outline-color: {getOutlineColor(g)}"
+                        class:selected={g === colorStore.cur.color}
+                        class:hovered={g === colorStore.hoveredPreview}
                         onclick={() => handleClick(g)}
                         onmouseenter={() => setHoveredHex(g)}
                         onmouseleave={() => setHoveredHex(null)}
@@ -122,7 +158,9 @@
                 {#each b.set as s}
                     <div
                         class="swatch"
-                        style="background-color: {s}"
+                        style="background-color: {s}; --outline-color: {getOutlineColor(s)}"
+                        class:selected={s === colorStore.cur.color}
+                        class:hovered={s === colorStore.hoveredPreview}
                         onclick={() => handleClick(s)}
                         onmouseenter={() => setHoveredHex(s)}
                         onmouseleave={() => setHoveredHex(null)}
@@ -218,6 +256,21 @@
 
     .swatch:hover .tooltip {
         display: block;
+    }
+    /*
+    .swatch:hover {
+        outline: 2px dotted var(--text);
+        outline-offset: -2px;
+    }
+        */
+
+    .swatch.hovered {
+        outline: 2px dotted var(--outline-color, var(--text));
+        outline-offset: -2px;
+    }
+    .swatch.selected {
+        outline: 2px solid var(--outline-color, var(--text));
+        outline-offset: -2px;
     }
 
     .swatch-preview-wrapper {

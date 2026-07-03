@@ -10,9 +10,23 @@ And webknobs
 
 
 
-Ideas:
-- Add a little drawing widget by the sitePreview?
 
+7/2/26:
+- remove the raw color drop 
+- bring back the borders for the selected color
+- functioning export window
+- onboarding biz 
+- help button w tutorial / walkthrough
+
+
+
+
+
+(7/1/26):
+
+Remaining:
+- export widget 
+- suggest features (google form)
 
 
 

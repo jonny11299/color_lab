@@ -12,6 +12,7 @@
     import Dots from "./Dots.svelte";
     import ColorsSummary from "./ColorsSummary.svelte";
     import ColorSelector from "./ColorSelector.svelte";
+    import ExportCSS from "./ExportCSS.svelte";
 
     import eyeOpen from "$lib/icons/eye-open.svg?raw";
     import eyeClose from "$lib/icons/eye-close.svg?raw";
@@ -227,6 +228,26 @@
             </div>
         </div>
 
+        <div class="pane-bottom" class:pane-focused={focus === 4}>
+            <!-- svelte-ignore a11y_click_events_have_key_events -->
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
+            <div class="pane-header" onclick={() => (paneVisible[4] = !paneVisible[4])}>
+                Export CSS
+
+                <button class="eye-btn">
+                    {@html paneVisible[4] ? eyeOpen : eyeClose}
+                </button>
+            </div>
+
+            <div class="pane-body-bottom" class:hidden={!paneVisible[4]}>
+                {#if awaitingLaunch[3]}
+                    <PlaceholderMessage />
+                {:else}
+                    <ExportCSS />
+                {/if}
+            </div>
+        </div>
+
         <!--
         <div class="bottomToolbarSticky">
             <ColorsSummary />
@@ -307,10 +328,10 @@
                         primary={getColor(3)}
                         secondary={getColor(4)}
                         accent={getColor(5)}
-                        muteStrength={paramStore.params[0].cur ?? 0.5}
-                        typeScale={paramStore.params[1].cur ?? 1.2}
-                        borderWidth={paramStore.params[2].cur ?? 3}
-                        borderRadius={paramStore.params[3].cur ?? 10}
+                        typeScale={paramStore.params[0].cur ?? 1.2}
+                        borderWidth={paramStore.params[1].cur ?? 3}
+                        borderRadius={paramStore.params[2].cur ?? 10}
+                        muteStrength={paramStore.params[3].cur ?? 0.5}
                     />
                 {/if}
             </div>
