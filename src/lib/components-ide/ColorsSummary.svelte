@@ -2,6 +2,7 @@
 
 <script>
     import { colorStore } from "$lib/stores/colorStore.svelte.js";
+    import { phaseStore } from "$lib/stores/phaseStore.svelte.js";
     import chroma from "chroma-js";
 
     let tailored = $derived(colorStore.tailored);
@@ -21,22 +22,26 @@
     let cachedTextColor = null;
 
     function handleKeydown(event) {
-        if (event.key === "ArrowLeft") {
-            event.preventDefault();
-            colorStore.iterateReverse();
-            leftPressed = true;
-        } else if (event.key === "ArrowRight") {
-            event.preventDefault();
-            colorStore.iterate();
-            rightPressed = true;
+        if (!phaseStore.help) {
+            if (event.key === "ArrowLeft") {
+                event.preventDefault();
+                colorStore.iterateReverse();
+                leftPressed = true;
+            } else if (event.key === "ArrowRight") {
+                event.preventDefault();
+                colorStore.iterate();
+                rightPressed = true;
+            }
         }
     }
 
     function handleKeyup(event) {
-        if (event.key === "ArrowLeft") {
-            leftPressed = false;
-        } else if (event.key === "ArrowRight") {
-            rightPressed = false;
+        if (!phaseStore.help) {
+            if (event.key === "ArrowLeft") {
+                leftPressed = false;
+            } else if (event.key === "ArrowRight") {
+                rightPressed = false;
+            }
         }
     }
 
@@ -99,6 +104,9 @@
     // picks a border color that stays visible against the swatch's own background
     function getBorderColor(hex) {
         try {
+            if (hex) {
+                if (hex.includes("var")) hex = colorStore.resolveToHex(hex);
+            }
             if (!hex || hex.includes("var(--")) return "var(--text)";
 
             const textColor = getTextColor();

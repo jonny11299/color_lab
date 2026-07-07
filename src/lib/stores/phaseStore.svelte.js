@@ -16,15 +16,31 @@
 function createPhaseStore() {
     let phase = $state(0);
     let exporting = $state(false);
+    let helpWindowOpen = $state(false);
+    let launchScreen = $state(false);
 
 
     return {
         get phase() { return phase },
         get exporting() { return exporting },
-
+        get help() { return helpWindowOpen },
+        get launchScreen() { return launchScreen },
 
         setExportState: (bool) => {
             exporting = bool;
+        },
+
+        openHelpWindow: () => {
+            helpWindowOpen = true;
+        },
+        openHelpWindowLaunch: () => {
+            launchScreen = true;
+            helpWindowOpen = true;
+        },
+
+        closeHelpWindow: () => {
+            launchScreen = false;
+            helpWindowOpen = false;
         },
 
 

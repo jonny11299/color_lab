@@ -20,7 +20,8 @@
         <div class="menuOptions">
             <button onclick={() => colorStore.undo()}>Undo</button>
             <button onclick={() => colorStore.redo()}>Redo</button>
-            <button onclick={() => exp()}>Export</button>
+            <button onclick={() => phaseStore.openHelpWindow()}>Help</button>
+            <!-- <button onclick={() => exp()}>Export</button> -->
         </div>
     </div>
 

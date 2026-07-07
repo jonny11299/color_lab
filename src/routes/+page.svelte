@@ -9,6 +9,18 @@
     import CssEditor from "$lib/components-ide/CssEditor.svelte";
     import TwoPanes from "$lib/components-ide/TwoPanes.svelte";
     import ExportWindow from "$lib/components-ide/ExportWindow.svelte";
+    import HelpWindow from "$lib/components-ide/HelpWindow.svelte";
+
+    import { onMount } from "svelte";
+
+    let showLaunch = $state(false);
+    onMount(() => {
+        // true if it doesn't exist, false if somebody set this to true.
+        const dontShowLaunchSplash = localStorage.getItem("dontShowColorLabHelpAgain");
+        if (!dontShowLaunchSplash) {
+            phaseStore.openHelpWindowLaunch();
+        }
+    });
 </script>
 
 <!-- /components -->
@@ -30,6 +42,10 @@
 <div style={phaseStore.exporting ? "display: hidden" : "display: block"}>
     <TwoPanes />
 </div>
+
+{#if phaseStore.help}
+    <HelpWindow />
+{/if}
 
 <style>
 </style>
